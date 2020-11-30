@@ -86,7 +86,7 @@ def tweets_API_extract(keywords, num_of_tweets):
             secret = get_secret_value_response['SecretString']
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
-    auth = tweepy.AppAuthHandler(get_secret_value_response['consumer_key'], get_secret_value_response['consumer_secret'])
+    auth = tweepy.AppAuthHandler(secret['consumer_key'], secret['consumer_secret'])
     #auth.set_access_token(access_token_key, access_token_secret)
 
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
@@ -197,7 +197,7 @@ def about_page():
     st.title("What Does Twitter Say About Covid-19?")
     st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
     st.markdown("This app is an <i>attempt to analyse</i> covid-related misinformation circulating on Twitter.", unsafe_allow_html=True)
-    st.info("This app collect <style>covid-related tweets{color: red;}</style>, and classifies them as either scientific or conspiratorial.", unsafe_allow_html=True)
+    st.info("This app collect covid-related tweets, and classifies them as either scientific or conspiratorial.")
     
 
 def instructions_for_use():
