@@ -2,3 +2,5 @@ streamlit
 pywsd
 nltk
 tweepy
+jsonpickle
+matplotlib
