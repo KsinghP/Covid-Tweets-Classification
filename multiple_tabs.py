@@ -4,6 +4,9 @@ Created on Mon Nov 16 21:19:40 2020
 
 @author: Prabhat
 """
+import boto3
+import base64
+from botocore.exceptions import ClientError
 import streamlit as st
 import tweepy
 import json
@@ -22,11 +25,6 @@ import nltk
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
-os.chdir(r'C:\Users\Prabhat')
-
-
-
-
 
 def main():
     st.sidebar.title("Options for Users")
@@ -41,29 +39,74 @@ def main():
         input_parameters()
         
 def tweets_API_extract(keywords, num_of_tweets):
-        with open('credentials.json') as creds:    
-            credentials = json.load(creds)
-        auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+
+    secret_name = "twitter_creds"
+    region_name = "us-east-2"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    # In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
+    # See https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+    # We rethrow the exception by default.
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'DecryptionFailureException':
+            # Secrets Manager can't decrypt the protected secret text using the provided KMS key.
+            # Deal with the exception here, and/or rethrow at your discretion.
+            raise e
+        elif e.response['Error']['Code'] == 'InternalServiceErrorException':
+            # An error occurred on the server side.
+            # Deal with the exception here, and/or rethrow at your discretion.
+            raise e
+        elif e.response['Error']['Code'] == 'InvalidParameterException':
+            # You provided an invalid value for a parameter.
+            # Deal with the exception here, and/or rethrow at your discretion.
+            raise e
+        elif e.response['Error']['Code'] == 'InvalidRequestException':
+            # You provided a parameter value that is not valid for the current state of the resource.
+            # Deal with the exception here, and/or rethrow at your discretion.
+            raise e
+        elif e.response['Error']['Code'] == 'ResourceNotFoundException':
+            # We can't find the resource that you asked for.
+            # Deal with the exception here, and/or rethrow at your discretion.
+            raise e
+    else:
+        # Decrypts secret using the associated KMS CMK.
+        # Depending on whether the secret is a string or binary, one of these fields will be populated.
+        if 'SecretString' in get_secret_value_response:
+            secret = get_secret_value_response['SecretString']
+        else:
+            decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+    auth = tweepy.AppAuthHandler(get_secret_value_response['consumer_key'], get_secret_value_response['consumer_secret'])
     #auth.set_access_token(access_token_key, access_token_secret)
 
-        api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-        if (not api):
+    if (not api):
             print ("Can't Authenticate")
             sys.exit(-1)
 
-        maxTweets = num_of_tweets # Some arbitrary large number
-        tweetsPerQry = 100
+    maxTweets = num_of_tweets # Some arbitrary large number
+    tweetsPerQry = 100
 
-        fName = 'tweets_trial_csv.txt'
+    fName = 'tweets_trial_csv.txt'
 
-        sinceId = None
-        tweets = []
+    sinceId = None
+    tweets = []
 
-        max_id = -1
-        tweetCount = 0
+    max_id = -1
+    tweetCount = 0
 
-        with open(fName, 'w') as f:
+    with open(fName, 'w') as f:
             while tweetCount < maxTweets:
                 try:
                     if (max_id <= 0):
@@ -102,9 +145,9 @@ def tweets_API_extract(keywords, num_of_tweets):
             # Just exit if any error
                     print("some error : " + str(e))
                     break
-        tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
+    tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
     
-        process_tweets(tweets_preprocessed_df)
+    process_tweets(tweets_preprocessed_df)
 
 def process_tweets(tweets_processed_df):    
     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: str.lower(x))
