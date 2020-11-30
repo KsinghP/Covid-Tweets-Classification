@@ -25,7 +25,7 @@ w_tokenizer = nltk.tokenize.WhitespaceTokenizer()
 lemmatizer = nltk.stem.WordNetLemmatizer()
 # from nltk.corpus import wordnet as wn
 from nltk.stem.wordnet import WordNetLemmatizer
-from pywsd.utils import lemmatize, lemmatize_sentence
+# from pywsd.utils import lemmatize, lemmatize_sentence
 
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
@@ -127,7 +127,7 @@ def process_tweets(tweets_processed_df):
     # remove "not" from stop words
     stop_words = set(stopwords.words('english')) - set(['not'])
     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
-    tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
+    # tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
     
     predict_tweets(tweets_processed_df)
 
