@@ -18,20 +18,20 @@ import re
 import string
 stop = stopwords.words('english')
 import nltk
-from nltk.stem.lancaster import LancasterStemmer
-stemmer = LancasterStemmer()
+#from nltk.stem.lancaster import LancasterStemmer
+#stemmer = LancasterStemmer()
 # nltk.download('wordnet')
-w_tokenizer = nltk.tokenize.WhitespaceTokenizer()
-lemmatizer = nltk.stem.WordNetLemmatizer()
+#w_tokenizer = nltk.tokenize.WhitespaceTokenizer()
+#lemmatizer = nltk.stem.WordNetLemmatizer()
 # from nltk.corpus import wordnet as wn
-from nltk.stem.wordnet import WordNetLemmatizer
+#from nltk.stem.wordnet import WordNetLemmatizer
 # from pywsd.utils import lemmatize, lemmatize_sentence
 
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 # tfidf_transformer = TfidfTransformer()
-from nltk.stem import PorterStemmer
-porter = PorterStemmer()
+#from nltk.stem import PorterStemmer
+# porter = PorterStemmer()
 # nltk.download('averaged_perceptron_tagger')
 
 os.chdir(r'C:\Users\Prabhat')
