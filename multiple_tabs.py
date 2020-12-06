@@ -25,6 +25,7 @@ import nltk
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
+os.chdir(r'C:\Users\Prabhat')
 
 def main():
     st.sidebar.title("Options for Users")
