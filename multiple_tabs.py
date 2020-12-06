@@ -25,7 +25,7 @@ import nltk
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
-os.chdir(r'C:\Users\Prabhat')
+#os.chdir(r'C:\Users\Prabhat')
 
 def main():
     st.sidebar.title("Options for Users")
@@ -40,12 +40,19 @@ def main():
         input_parameters()
         
 def tweets_API_extract(keywords, num_of_tweets):
-    with open('credentials.json') as creds:
-        credentials = json.load(creds)
+#    with open('credentials.json') as creds:
+#        credentials = json.load(creds)
 
-    auth = tweepy.AppAuthHandler(credentials ['consumer_key'], credentials ['consumer_secret'])
+
+    twitter_keys = {
+        'consumer_key':        'TjBYZRM6ajIHotXP60XgXJsSh',
+        'consumer_secret':     '3HETBSToEviHxW3VQZb9i3PVUKqvi75uezDFzUdXaXjwW3whsH',
+        'access_token_key':    '976708394370310144-ELyoMSfwXpPyuxENhIztG1T3Icx0Tav',
+        'access_token_secret': 'ozEVbT4BFwOt2lK44AUOkLPL9cZldxCNzy10YeNYNAbkh'
+    }
+    
+    auth = tweepy.AppAuthHandler(twitter_keys ['consumer_key'], twitter_keys ['consumer_secret'])
     #auth.set_access_token(access_token_key, access_token_secret)
-    print (auth)
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
     if (not api):
