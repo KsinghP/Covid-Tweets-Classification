@@ -40,10 +40,10 @@ def main():
         input_parameters()
         
 def tweets_API_extract(keywords, num_of_tweets):
-    with open('credentials.json') as creds:
+    with open('creds.json') as creds:
         credentials = json.load(creds)
     
-    auth = tweepy.AppAuthHandler(twitter_keys ['consumer_key'], twitter_keys ['consumer_secret'])
+    auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     #auth.set_access_token(access_token_key, access_token_secret)
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
