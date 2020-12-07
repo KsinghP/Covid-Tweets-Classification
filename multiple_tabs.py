@@ -40,7 +40,7 @@ def main():
         input_parameters()
         
 def tweets_API_extract(keywords, num_of_tweets):
-    with open('creds.json') as creds:
+    with open('credentials.json') as creds:
         credentials = json.load(creds)
     
     auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
