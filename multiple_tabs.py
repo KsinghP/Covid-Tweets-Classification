@@ -155,7 +155,8 @@ def filter_user_tweets(outtweets, c):
         if any(x in tweet for x in keywords):
             tweets_containing_keywords.append(tweet)
     
-    process_tweets(tweets_containing_keywords, c)
+    tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
+    process_tweets(tweets_df_labels, c)
     
     
 def process_tweets(tweets_processed_df, c):
