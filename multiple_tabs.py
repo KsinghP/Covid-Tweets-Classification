@@ -21,7 +21,7 @@ import re
 import string
 stop = stopwords.words('english')
 import nltk
-import plotly.express as px
+#import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
