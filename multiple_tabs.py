@@ -21,7 +21,7 @@ import re
 import string
 stop = stopwords.words('english')
 import nltk
-
+import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
@@ -189,7 +189,13 @@ def predict_tweets(tweets_processed_df, c):
 def group_by_tweet_label(tweets_processed_df, c):  
     grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
     if (c == 0):
-        st.bar_chart(grouped_df['num_of_tweets_by_type'])
+        ax = plt.subplot(121, aspect='equal')
+        fig = ax.pie(grouped_df['num_of_tweets_by_type'], labels = grouped_df['label_cv'], autopct='%1.1f%%', shadow=True, startangle=90)
+        st.plotly_chart(fig)        
+        
+        #fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
+        #st.plotly_chart(fig)
+        #st.bar_chart(grouped_df['num_of_tweets_by_type'])
     
     if (c == 1):
         total_tweets = grouped_df['num_of_tweets_by_type'].sum()
