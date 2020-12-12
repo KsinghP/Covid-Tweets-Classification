@@ -111,6 +111,7 @@ def tweets_keywords_extract(keywords, num_of_tweets, c):
 def tweets_user_extract(screen_name, c):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
+    st.info(credentials)
     
     auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
@@ -129,7 +130,7 @@ def tweets_user_extract(screen_name, c):
     
     #keep grabbing tweets until there are no tweets left to grab
     while len(new_tweets) > 0:
-        #print(f"getting tweets before {oldest}")
+        print(f"getting tweets before {oldest}")
         
         #all subsiquent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name = screen_name, count=200, max_id=oldest)
@@ -187,12 +188,16 @@ def predict_tweets(tweets_processed_df, c):
 
 def group_by_tweet_label(tweets_processed_df, c):  
     grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
-    
-    #st.write(tweets_processed_df.head())
     st.bar_chart(grouped_df['num_of_tweets_by_type'])
+    
     if (c == 1):
-        #category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
-        st.info("the category is")
+        total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+        st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
+        category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
+        if (category == 'scientific'): 
+            st.info("this handle's covid-related tweets are usually scientific")
+        elif (category == 'conspiratorial'):
+            st.info("this handle's covid-related tweets are usually conspiratorial")
 
 def input_parameters_keywords(c):
       keywords = st.text_input('Enter keywords')
