@@ -188,7 +188,8 @@ def predict_tweets(tweets_processed_df, c):
 
 def group_by_tweet_label(tweets_processed_df, c):  
     grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
-    st.bar_chart(grouped_df['num_of_tweets_by_type'])
+    if (c == 0):
+        st.bar_chart(grouped_df['num_of_tweets_by_type'])
     
     if (c == 1):
         total_tweets = grouped_df['num_of_tweets_by_type'].sum()
