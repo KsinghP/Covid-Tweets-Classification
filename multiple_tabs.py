@@ -25,32 +25,35 @@ import nltk
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
-#os.chdir(r'C:\Users\Prabhat')
 
 def main():
     st.sidebar.title("Options for Users")
-    app_mode = st.sidebar.selectbox("Choose the app mode", ["About", "How to Use", "Run the App"])
+    app_mode = st.sidebar.selectbox("Choose the app mode", ["About", "How to Use", "Run keyword feature", "Run twitter handle feature"])
     if app_mode == "About":
         about_page()
 
     elif app_mode == "How to Use":
         instructions_for_use()
 
-    elif app_mode == "Run the App":
-        input_parameters()
-        
-def tweets_API_extract(keywords, num_of_tweets):
+    elif app_mode == "Run keyword feature":
+        input_parameters_keywords(c = 0)
+     
+    elif app_mode == "Run twitter handle feature":
+        input_parameters_handle(c = 1)
+
+def tweets_keywords_extract(keywords, num_of_tweets, c):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
     auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
-    #auth.set_access_token(access_token_key, access_token_secret)
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-    if (not api):
-            print ("Can't Authenticate")
-            sys.exit(-1)
-
+# =============================================================================
+#     if (not api):
+#             print ("Can't Authenticate")
+#             sys.exit(-1)
+# 
+# =============================================================================
     maxTweets = num_of_tweets # Some arbitrary large number
     tweetsPerQry = 100
 
@@ -103,9 +106,60 @@ def tweets_API_extract(keywords, num_of_tweets):
                     break
     tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
     
-    process_tweets(tweets_preprocessed_df)
+    process_tweets(tweets_preprocessed_df, c)
 
-def process_tweets(tweets_processed_df):    
+def tweets_user_extract(screen_name, c):
+    with open('credentials.json') as creds:
+        credentials = json.load(creds)
+    
+    auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    
+    
+    alltweets = []  
+    
+    #make initial request for most recent tweets (200 is the maximum allowed count)
+    new_tweets = api.user_timeline(screen_name = screen_name, count=200)
+    
+    #save most recent tweets
+    alltweets.extend(new_tweets)
+    
+    #save the id of the oldest tweet less one
+    oldest = alltweets[-1].id - 1
+    
+    #keep grabbing tweets until there are no tweets left to grab
+    while len(new_tweets) > 0:
+        #print(f"getting tweets before {oldest}")
+        
+        #all subsiquent requests use the max_id param to prevent duplicates
+        new_tweets = api.user_timeline(screen_name = screen_name, count=200, max_id=oldest)
+        
+        #save most recent tweets
+        alltweets.extend(new_tweets)
+        
+        #update the id of the oldest tweet less one
+        oldest = alltweets[-1].id - 1
+    
+    #transform the tweepy tweets into a 2D array that will populate the csv 
+    outtweets = [tweet.text for tweet in alltweets]
+    
+    filter_user_tweets(outtweets, c)
+
+    
+def filter_user_tweets(outtweets, c):
+    keywords = ['SarsCov2', 'corona', 'Wuhan', 'China virus', 'China plague', 'Chinavirus', 'coronavirus', 'covid', 'COVID', 'covid19', 'covid-19', 'mask', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen', 'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown']
+
+    tweets_containing_keywords = [] 
+    for tweet in outtweets:
+        if any(x in tweet for x in keywords):
+            tweets_containing_keywords.append(tweet)
+    
+    process_tweets(tweets_containing_keywords, c)
+    
+    
+def process_tweets(tweets_processed_df, c):
+    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x:  re.sub(r'(pic.twitter.com.*)|(http.*?\s)|(http.*?)$|(RT\s)', "", x))
+    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: x.encode('ascii', 'ignore').decode("utf-8"))    
     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: str.lower(x))
     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(&amp?)", "", x))
     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(@.*?)\s", "", x))
@@ -116,38 +170,50 @@ def process_tweets(tweets_processed_df):
     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
     # tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
     
-    predict_tweets(tweets_processed_df)
+    predict_tweets(tweets_processed_df, c)
 
 @st.cache()
 def load_model():
     loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
     return loaded_model
 
-def predict_tweets(tweets_processed_df):
+def predict_tweets(tweets_processed_df, c):
     loaded_model = load_model()
     loaded_vectorizer = pickle.load(open('vectorizer.pickle', 'rb'))
-    features_x = loaded_vectorizer.transform(tweets_processed_df['text'])
-    tweets_processed_df['label_cv'] = loaded_model.predict(features_x)
+    features = loaded_vectorizer.transform(tweets_processed_df['text'])
+    tweets_processed_df['label_cv'] = loaded_model.predict(features)
     # tweets_processed_df['label_tfidf'] = loaded_model.predict(features_done_x)
-    group_by_tweet_label(tweets_processed_df)
+    group_by_tweet_label(tweets_processed_df, c)
 
-def group_by_tweet_label(tweets_processed_df):    
+def group_by_tweet_label(tweets_processed_df, c):  
     grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
     
-    st.write(tweets_processed_df.head())
+    #st.write(tweets_processed_df.head())
     st.bar_chart(grouped_df['num_of_tweets_by_type'])
+    if (c == 1):
+        #category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
+        st.info("the category is")
 
-
-def input_parameters():
+def input_parameters_keywords(c):
       keywords = st.text_input('Enter keywords')
       num_of_tweets = st.number_input('enter number of tweets', value = 100)
       num_of_tweets = int(num_of_tweets)
     
-      tweets_API_extract(keywords, num_of_tweets)
+      tweets_keywords_extract(keywords, num_of_tweets,c)
 
-def display_results(tweets_processed_df, grouped_df):   
-    st.write(tweets_processed_df.head())
-    st.bar_chart(grouped_df['num_of_tweets_by_type'])    
+
+def input_parameters_handle(c):
+    screen_name = st.text_input('Enter twitter handle without "@"')
+
+    tweets_user_extract(screen_name, c)
+
+
+# =============================================================================
+# def display_results(tweets_processed_df, grouped_df):   
+#     st.write(tweets_processed_df.head())
+#     st.bar_chart(grouped_df['num_of_tweets_by_type'])    
+# =============================================================================
+
 
 def about_page():
     st.title("What Does Twitter Say About Covid-19?")
