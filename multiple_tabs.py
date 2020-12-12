@@ -191,7 +191,7 @@ def group_by_tweet_label(tweets_processed_df, c):
     if (c == 0):
         ax = plt.subplot(121, aspect='equal')
         fig = ax.pie(grouped_df['num_of_tweets_by_type'], labels = grouped_df['label_cv'], autopct='%1.1f%%', shadow=True, startangle=90)
-        st.plotly_chart(fig)        
+        st.pie_chart(fig)        
         
         #fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
         #st.plotly_chart(fig)
