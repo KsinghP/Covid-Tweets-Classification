@@ -111,7 +111,6 @@ def tweets_keywords_extract(keywords, num_of_tweets, c):
 def tweets_user_extract(screen_name, c):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
-    st.info(credentials)
     
     auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
