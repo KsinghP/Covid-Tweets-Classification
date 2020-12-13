@@ -6,3 +6,4 @@ tweepy
 jsonpickle
 matplotlib
 sklearn
+plotly
