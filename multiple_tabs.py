@@ -21,7 +21,7 @@ import re
 import string
 stop = stopwords.words('english')
 import nltk
-#import plotly.express as px
+import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
@@ -188,23 +188,9 @@ def predict_tweets(tweets_processed_df, c):
 
 def group_by_tweet_label(tweets_processed_df, c):  
     grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
-    if (c == 0):
-        ax = plt.subplot(121, aspect='equal')
-        fig = ax.pie(grouped_df['num_of_tweets_by_type'], labels = grouped_df['label_cv'], autopct='%1.1f%%', shadow=True, startangle=90)
-        st.pie_chart(fig)        
-        
-        #fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
-        #st.plotly_chart(fig)
-        #st.bar_chart(grouped_df['num_of_tweets_by_type'])
     
-    if (c == 1):
-        total_tweets = grouped_df['num_of_tweets_by_type'].sum()
-        st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
-        category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
-        if (category == 'scientific'): 
-            st.info("this handle's covid-related tweets are usually scientific")
-        elif (category == 'conspiratorial'):
-            st.info("this handle's covid-related tweets are usually conspiratorial")
+    display_results(grouped_df, c)
+    
 
 def input_parameters_keywords(c):
       keywords = st.text_input('Enter keywords')
@@ -220,12 +206,19 @@ def input_parameters_handle(c):
     tweets_user_extract(screen_name, c)
 
 
-# =============================================================================
-# def display_results(tweets_processed_df, grouped_df):   
-#     st.write(tweets_processed_df.head())
-#     st.bar_chart(grouped_df['num_of_tweets_by_type'])    
-# =============================================================================
-
+def display_results(grouped_df, c):   
+    if (c == 0):
+        fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_cv')
+        st.plotly_chart(fig)
+        
+    if (c == 1):
+        total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+        st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
+        category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
+        if (category == 'scientific'): 
+            st.info("this handle's covid-related tweets are usually scientific")
+        elif (category == 'conspiratorial'):
+            st.info("this handle's covid-related tweets are usually conspiratorial")
 
 def about_page():
     st.title("What Does Twitter Say About Covid-19?")
