@@ -24,6 +24,7 @@ import nltk
 import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
+from pywsd.utils import lemmatize, lemmatize_sentence
 
 
 def main():
@@ -151,9 +152,10 @@ def filter_user_tweets(outtweets):
     tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
     
     c = 1
+    total_tweets = len(outtweets)
     process_tweets(tweets_df_labels, c)
     
-    
+
 def process_tweets(tweets_processed_df, c):
     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x:  re.sub(r'(pic.twitter.com.*)|(http.*?\s)|(http.*?)$|(RT\s)', "", x))
     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: x.encode('ascii', 'ignore').decode("utf-8"))    
@@ -165,7 +167,7 @@ def process_tweets(tweets_processed_df, c):
     # remove "not" from stop words
     stop_words = set(stopwords.words('english')) - set(['not'])
     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
-    # tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
+    tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
     
     predict_tweets(tweets_processed_df, c)
 
