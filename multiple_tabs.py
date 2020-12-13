@@ -36,25 +36,19 @@ def main():
         instructions_for_use()
 
     elif app_mode == "Run keyword feature":
-        input_parameters_keywords(c = 0)
+        input_parameters_keywords()
      
     elif app_mode == "Run twitter handle feature":
-        input_parameters_handle(c = 1)
+        input_parameters_handle()
 
-def tweets_keywords_extract(keywords, num_of_tweets, c):
+def tweets_keywords_extract(keywords, num_of_tweets):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
     auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-# =============================================================================
-#     if (not api):
-#             print ("Can't Authenticate")
-#             sys.exit(-1)
-# 
-# =============================================================================
-    maxTweets = num_of_tweets # Some arbitrary large number
+    maxTweets = num_of_tweets
     tweetsPerQry = 100
 
     fName = 'tweets_trial_csv.txt'
@@ -98,7 +92,6 @@ def tweets_keywords_extract(keywords, num_of_tweets, c):
                         json_str = tweet._json
 
                     tweetCount += len(new_tweets)
-                    #print("Downloaded {0} tweets".format(tweetCount))
                     max_id = new_tweets[-1].id
                 except tweepy.TweepError as e:
             # Just exit if any error
@@ -106,9 +99,10 @@ def tweets_keywords_extract(keywords, num_of_tweets, c):
                     break
     tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
     
-    process_tweets(tweets_preprocessed_df, c)
+    c = 0
+    process_tweets(tweets_preprocessed_df, c =0)
 
-def tweets_user_extract(screen_name, c):
+def tweets_user_extract(screen_name):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
@@ -143,10 +137,10 @@ def tweets_user_extract(screen_name, c):
     #transform the tweepy tweets into a 2D array that will populate the csv 
     outtweets = [tweet.text for tweet in alltweets]
     
-    filter_user_tweets(outtweets, c)
+    filter_user_tweets(outtweets)
 
     
-def filter_user_tweets(outtweets, c):
+def filter_user_tweets(outtweets):
     keywords = ['SarsCov2', 'corona', 'Wuhan', 'China virus', 'China plague', 'Chinavirus', 'coronavirus', 'covid', 'COVID', 'covid19', 'covid-19', 'mask', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen', 'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown']
 
     tweets_containing_keywords = [] 
@@ -155,6 +149,8 @@ def filter_user_tweets(outtweets, c):
             tweets_containing_keywords.append(tweet)
     
     tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
+    
+    c = 1
     process_tweets(tweets_df_labels, c)
     
     
@@ -192,18 +188,18 @@ def group_by_tweet_label(tweets_processed_df, c):
     display_results(grouped_df, c)
     
 
-def input_parameters_keywords(c):
+def input_parameters_keywords():
       keywords = st.text_input('Enter keywords')
       num_of_tweets = st.number_input('enter number of tweets', value = 100)
       num_of_tweets = int(num_of_tweets)
     
-      tweets_keywords_extract(keywords, num_of_tweets,c)
+      tweets_keywords_extract(keywords, num_of_tweets)
 
 
-def input_parameters_handle(c):
+def input_parameters_handle():
     screen_name = st.text_input('Enter twitter handle without "@"')
 
-    tweets_user_extract(screen_name, c)
+    tweets_user_extract(screen_name)
 
 
 def display_results(grouped_df, c):   
