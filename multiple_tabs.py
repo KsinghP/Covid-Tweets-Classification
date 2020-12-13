@@ -49,19 +49,20 @@ def tweets_keywords_extract(keywords, num_of_tweets):
     
     auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    
+    if keywords:
+        maxTweets = num_of_tweets
+        tweetsPerQry = 100
 
-    maxTweets = num_of_tweets
-    tweetsPerQry = 100
+        fName = 'tweets_trial_csv.txt'
 
-    fName = 'tweets_trial_csv.txt'
+        sinceId = None
+        tweets = []
 
-    sinceId = None
-    tweets = []
+        max_id = -1
+        tweetCount = 0
 
-    max_id = -1
-    tweetCount = 0
-
-    with open(fName, 'w') as f:
+        with open(fName, 'w') as f:
             while tweetCount < maxTweets:
                 try:
                     if (max_id <= 0):
@@ -99,11 +100,14 @@ def tweets_keywords_extract(keywords, num_of_tweets):
             # Just exit if any error
                     print("some error : " + str(e))
                     break
-    tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
+        tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
     
-    c = 0
-    process_tweets(tweets_preprocessed_df, c =0)
-
+        c = 0
+        process_tweets(tweets_preprocessed_df, c =0)
+    
+    elif not keywords:
+        st.write("")
+        
 def tweets_user_extract(screen_name):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
@@ -115,33 +119,37 @@ def tweets_user_extract(screen_name):
     alltweets = []  
     
     #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name, count=200)
+    try:
+        new_tweets = api.user_timeline(screen_name = screen_name, count=200)
     
-    #save most recent tweets
-    alltweets.extend(new_tweets)
-    
-    #save the id of the oldest tweet less one
-    oldest = alltweets[-1].id - 1
-    
-    #keep grabbing tweets until there are no tweets left to grab
-    while len(new_tweets) > 0:
-        print(f"getting tweets before {oldest}")
-        
-        #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = screen_name, count=200, max_id=oldest)
-        
         #save most recent tweets
         alltweets.extend(new_tweets)
-        
-        #update the id of the oldest tweet less one
+    
+        #save the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
     
-    #transform the tweepy tweets into a 2D array that will populate the csv 
-    outtweets = [tweet.text for tweet in alltweets]
+        #keep grabbing tweets until there are no tweets left to grab
+        while len(new_tweets) > 0:
+            print(f"getting tweets before {oldest}")
+        
+            #all subsiquent requests use the max_id param to prevent duplicates
+            new_tweets = api.user_timeline(screen_name = screen_name, count=200, max_id=oldest)
+        
+            #save most recent tweets
+            alltweets.extend(new_tweets)
+        
+            #update the id of the oldest tweet less one
+            oldest = alltweets[-1].id - 1
     
-    filter_user_tweets(outtweets)
+        #transform the tweepy tweets into a 2D array that will populate the csv 
+        outtweets = [tweet.text for tweet in alltweets]
+    
+        filter_user_tweets(outtweets)
+    
+    except:
+        st.write("")
 
-    
+
 def filter_user_tweets(outtweets):
     keywords = ['SarsCov2', 'corona', 'Wuhan', 'China virus', 'China plague', 'Chinavirus', 'coronavirus', 'covid', 'COVID', 'covid19', 'covid-19', 'mask', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen', 'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown']
 
