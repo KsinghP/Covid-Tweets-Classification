@@ -25,7 +25,7 @@ import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 from pywsd.utils import lemmatize, lemmatize_sentence
-nltk.download('wordnet')
+from wn import WordNet
 
 def main():
     st.sidebar.title("Options for Users")
