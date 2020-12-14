@@ -24,6 +24,7 @@ import nltk
 import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
+from wordcloud import WordCloud
 #from nltk.corpus import wordnet as wn
 #from pywsd.utils import lemmatize, lemmatize_sentence
 #from wn import WordNet
@@ -175,7 +176,7 @@ def process_tweets(tweets_processed_df, c):
 
     # remove "not" from stop words
     stop_words = set(stopwords.words('english')) - set(['not'])
-    tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
+    tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
     #tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
     
     predict_tweets(tweets_processed_df, c)
@@ -196,7 +197,7 @@ def predict_tweets(tweets_processed_df, c):
 def group_by_tweet_label(tweets_processed_df, c):  
     grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
     
-    display_results(grouped_df, c)
+    display_results(tweets_processed_df, grouped_df, c)
     
 
 def input_parameters_keywords():
@@ -213,7 +214,8 @@ def input_parameters_handle():
     tweets_user_extract(screen_name)
 
 
-def display_results(grouped_df, c):   
+def display_results(tweets_processed_df, grouped_df, c):   
+        
     if (c == 0):
         fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_cv')
         st.plotly_chart(fig)
@@ -226,7 +228,15 @@ def display_results(grouped_df, c):
             st.info("this handle's covid-related tweets are usually scientific")
         elif (category == 'conspiratorial'):
             st.info("this handle's covid-related tweets are usually conspiratorial")
-
+        
+        combined_string = ' '.join(tweets_processed_df['text'])
+        wordcloud = WordCloud().generate(combined_string)
+        fig, ax = plt.subplots()
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis("off")
+        plt.show()
+        st.pyplot(fig)
+        
 def about_page():
     st.title("What Does Twitter Say About Covid-19?")
     st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
