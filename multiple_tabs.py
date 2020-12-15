@@ -27,7 +27,7 @@ count_vect = CountVectorizer()
 from wordcloud import WordCloud
 #from nltk.corpus import wordnet as wn
 #from pywsd.utils import lemmatize, lemmatize_sentence
-from nltk.corpus.wordnet import WordNet
+from nltk.corpus import wordnet as wn
 
 def main():
     st.sidebar.title("Options for Users")
