@@ -26,8 +26,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 from wordcloud import WordCloud
 #from nltk.corpus import wordnet as wn
-from pywsd.utils import lemmatize, lemmatize_sentence
 from nltk.corpus import wordnet as wn
+from pywsd.utils import lemmatize, lemmatize_sentence
+
 
 def main():
     st.sidebar.title("Options for Users")
