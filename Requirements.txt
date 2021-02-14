@@ -7,5 +7,5 @@ jsonpickle
 matplotlib
 sklearn
 plotly
-plotly-express
+plotly_express
 wordcloud
