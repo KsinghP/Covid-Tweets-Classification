@@ -16,16 +16,15 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
-from nltk.corpus import stopwords
 import re
 import string
 stop = stopwords.words('english')
 import nltk
+from nltk.corpus import stopwords
 import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 from wordcloud import WordCloud
-#from nltk.corpus import wordnet as wn
 #from nltk.corpus import wordnet as wn
 #from pywsd.utils import lemmatize, lemmatize_sentence
 
