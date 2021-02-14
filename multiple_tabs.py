@@ -18,9 +18,9 @@ import matplotlib.pyplot as plt
 import pickle
 import re
 import string
-stop = stopwords.words('english')
 import nltk
 from nltk.corpus import stopwords
+stop = stopwords.words('english')
 import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
