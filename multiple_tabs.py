@@ -20,6 +20,7 @@ import re
 import string
 import nltk
 from nltk.corpus import stopwords
+nltk.download('stopwords')
 stop = stopwords.words('english')
 import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
