@@ -4,8 +4,11 @@ Created on Mon Mar  1 19:47:58 2021
 
 @author: Prabhat
 """
+import streamlit as st
 
-print ("Hello world")
+
+
+st.info("Hello world")
 def get_secret():
 
     secret_name = "twitter_creds"
@@ -58,5 +61,7 @@ def get_secret():
     return secret
 
 def tweets_keywords_extract():
+    
+
     secret_key = get_secret()
-    print (secret_key)
+    st.info(secret_key)
