@@ -102,12 +102,11 @@ def main():
 
 def tweets_keywords_extract(keywords, num_of_tweets):
     secret_key = get_secret()
-    print (secret_key)
     
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
-    auth = tweepy.AppAuthHandlersecret_key['consumer_key'], secret_key['consumer_secret'])
+    auth = tweepy.AppAuthHandler(secret_key['consumer_key'], secret_key['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
     if keywords:
@@ -169,10 +168,13 @@ def tweets_keywords_extract(keywords, num_of_tweets):
         st.write("")
         
 def tweets_user_extract(screen_name):
+    secret_key = get_secret()  	
+        
+
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
-    auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+    auth = tweepy.AppAuthHandler(secret_key['consumer_key'], secret_key ['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
     
@@ -304,6 +306,8 @@ def about_page():
     
 
 def instructions_for_use():
+    secret_key = get_secret()
+    st.info(secret_key)
     st.info("Users can enter two parameters: 1. number of tweets the keywords based on which they want tweets to be collected.")
     st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
     st.markdown("To extract tweets based on multiple keywords together, please separate them only by a space.")
