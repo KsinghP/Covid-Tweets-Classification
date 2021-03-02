@@ -5,10 +5,11 @@ Created on Mon Mar  1 19:47:58 2021
 @author: Prabhat
 """
 import streamlit as st
-
-
-
+import boto3
+import base64
+from botocore.exceptions import ClientError
 st.info("Hello world")
+
 def get_secret():
 
     secret_name = "twitter_creds"
