@@ -65,3 +65,5 @@ def tweets_keywords_extract():
 
     secret_key = get_secret()
     st.info(secret_key)
+
+tweets_keywords_extract()
