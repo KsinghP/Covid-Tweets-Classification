@@ -303,7 +303,8 @@ def about_page():
     st.info(type(secret_key))
     #import ast
     #ast.literal_eval(secret_key)
-    st.info(secret_key[19:42])
+    #st.info(secret_key[17:42])
+    st.info(secret_key[62:91])
     #x = json.loads(secret_key)
     #st.info(x)
     #st.title(secret_key['consumer_key'])
