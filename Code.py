@@ -105,7 +105,7 @@ def tweets_keywords_extract(keywords, num_of_tweets):
     
     consumer_key = secret_key[17:42]
     consumer_secret = secret_key[63:113]
-    #with open('credentials.json') as creds:
+    ##with open('credentials.json') as creds:
     #    credentials = json.load(creds)
     
     auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
