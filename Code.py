@@ -300,7 +300,10 @@ def display_results(tweets_processed_df, grouped_df, c):
         
 def about_page():
     secret_key = get_secret()
-    st.title(type(secret_key))
+    st.info(type(secret_key))
+    import ast
+    ast.literal_eval(secret_key)
+    st.info(type(secret_key))
     #st.title(secret_key['consumer_key'])
     
     st.title("What Does Twitter Say About Covid-19?")
