@@ -302,16 +302,6 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.pyplot(fig)
         
 def about_page():
-    secret_key = get_secret()
-    #st.info(type(secret_key))
-    #import ast
-    #ast.literal_eval(secret_key)
-    #st.info(secret_key[17:42])
-    st.info(secret_key[63:113])
-    #x = json.loads(secret_key)
-    #st.info(x)
-    #st.title(secret_key['consumer_key'])
-    
     st.title("What Does Twitter Say About Covid-19?")
     st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
     st.markdown("This app is an <i>attempt to analyse</i> covid-related misinformation circulating on Twitter.", unsafe_allow_html=True)
