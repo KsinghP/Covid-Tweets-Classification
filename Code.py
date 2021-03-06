@@ -300,8 +300,8 @@ def display_results(tweets_processed_df, grouped_df, c):
         
 def about_page():
     secret_key = get_secret()
-    st.title(secret_key)
-    st.title(secret_key['consumer_key'])
+    st.title(type(secret_key))
+    #st.title(secret_key['consumer_key'])
     
     st.title("What Does Twitter Say About Covid-19?")
     st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
