@@ -304,8 +304,8 @@ def about_page():
     #import ast
     #ast.literal_eval(secret_key)
     st.info(secret_key)
-    x = json.loads(secret_key)
-    st.info(x)
+    #x = json.loads(secret_key)
+    #st.info(x)
     #st.title(secret_key['consumer_key'])
     
     st.title("What Does Twitter Say About Covid-19?")
