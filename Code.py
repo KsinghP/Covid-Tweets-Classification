@@ -106,7 +106,7 @@ def tweets_keywords_extract(keywords, num_of_tweets):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
-    auth = tweepy.AppAuthHandlercredentials['consumer_key'], credentials['consumer_secret'])
+    auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
     if keywords:
@@ -168,13 +168,13 @@ def tweets_keywords_extract(keywords, num_of_tweets):
         st.write("")
         
 def tweets_user_extract(screen_name):
-    secret_key = get_secret()  	
+    #secret_key = get_secret()  	
         
 
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
-    auth = tweepy.AppAuthHandler(secret_key['consumer_key'], secret_key ['consumer_secret'])
+    auth = tweepy.AppAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
     
