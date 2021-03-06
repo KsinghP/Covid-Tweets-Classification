@@ -302,6 +302,7 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.pyplot(fig)
         
 def about_page():
+    #st
     st.title("What Does Twitter Say About Covid-19?")
     st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
     st.markdown("This app is an <i>attempt to analyse</i> covid-related misinformation circulating on Twitter.", unsafe_allow_html=True)
