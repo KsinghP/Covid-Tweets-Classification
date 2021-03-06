@@ -106,7 +106,7 @@ def tweets_keywords_extract(keywords, num_of_tweets):
     with open('credentials.json') as creds:
         credentials = json.load(creds)
     
-    auth = tweepy.AppAuthHandler(secret_key['consumer_key'], secret_key['consumer_secret'])
+    auth = tweepy.AppAuthHandlercredentials['consumer_key'], credentials['consumer_secret'])
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
     if keywords:
@@ -299,6 +299,10 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.pyplot(fig)
         
 def about_page():
+    secret_key = get_secret()
+    st.title(secret_key)
+    st.title(secret_key['consumer_key'])
+    
     st.title("What Does Twitter Say About Covid-19?")
     st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
     st.markdown("This app is an <i>attempt to analyse</i> covid-related misinformation circulating on Twitter.", unsafe_allow_html=True)
