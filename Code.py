@@ -171,8 +171,8 @@ def tweets_keywords_extract(keywords, num_of_tweets):
         
 def tweets_user_extract(screen_name):
     secret_key = get_secret()  	
-    consumer_key = st.info(secret_key[17:42])
-    consumer_secret = st.info(secret_key[63:113])    
+    consumer_key = secret_key[17:42]
+    consumer_secret = secret_key[63:113]    
 
     #with open('credentials.json') as creds:
     #    credentials = json.load(creds)
