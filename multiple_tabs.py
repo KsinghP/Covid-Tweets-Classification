@@ -234,7 +234,7 @@ def process_tweets(tweets_processed_df, c):
     # remove "not" from stop words
     stop_words = set(stopwords.words('english')) - set(['not'])
     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
-    tweets_text_df["text"] = tweets_text_df["text"].apply(lambda x: ''.join(lemmatizer.lemmatize(x)))
+    tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ''.join(lemmatizer.lemmatize(x)))
     predict_tweets(tweets_processed_df, c)
 
 @st.cache()
@@ -295,7 +295,8 @@ def display_results(tweets_processed_df, grouped_df, c):
         
 
 def about_page():
-    st.title("Navigating Covid-related Misinformation on Twitter")
+    st.title("Navigating Covid Misinformation on Twitter")
+    st.write("Hello, welcome to my app, a humble attempt to understand and combat Covid-related misinformation on Twitter. This app is a result of "		
     st.write("This app runs [my project](https://github.com/KsinghP/Covid-Tweets-Classification)")
     st.markdown("Confused if a handle tweets conspiratorially about Covid? This app will tell you.")
     st.info('To know more about how it works, navigate to the "How to Use" section using the menu on the left hand side')
