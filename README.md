@@ -24,14 +24,19 @@ In order to better appreciate the information provided by the app, it’s import
 
 # Limitations and scope for improvement
 
-My model achieves about 77% accuracy. As the recall and precision metrics suggest, the non-conspiratorial label is predicted with greater accuracy than the conspiratorial one. There’s also strong dependence on certain keywords. For instance, the presence of “scamdemic” in a tweet almost always results in it being predicted as conspiratorial, even if reading the whole tweet – “covid is not a scamdemic”, for example – suggests that isn’t the case.
+I think the source of most, if not all, limitations in my model is the small size of training data (~500 tweets). Despite this, however, my model achieves a respectable 77% accuracy on the test set (~160 tweets). As the recall and precision metrics suggest, the non-conspiratorial label is predicted with greater accuracy than the conspiratorial one. 
 
-The Keras deep learning model I’ve used returns lower accuracy than 
+Another limitation is the model’s strong dependence on keywords. For instance, the presence of “scamdemic” in a tweet almost ensures its prediciton as conspiratorial (because in the training set almost all tweets associated with this word are conspiratorial), even if reading the whole tweet – “covid is not a scamdemic”, for example – would suggest that that isn’t the case. This is also likely due to limited training data.
 
-In order to improve the accuracy and mitigate other problems, I’m working on preparing a much bigger training set. This should reduce keyword dependence as well as increase the accuracy of the deep learning model.
+The model also fails to catch more subtle misinformation which involves a shrewd manipulation of statistics. An example would be this tweet (I'm referring to the tweet by @MLevitt_NP2013): https://twitter.com/CT_Bergstrom/status/1357998390680821764
 
-## Technologies Used
+The Keras deep learning model I’ve used returns slightly lower accuracy than the standard machine learning models - which eventually led me to choose one of those to output results to the app - perhaps again due to not enough training data.
 
-Python 3.6
+In order to improve the accuracy and mitigate other problems, I’m working on preparing a much bigger training set.
+
+## Tools Used
+
+Python 3.6 (pandas, nltk, sklearn, plotly, streamlit and others)
+
 AWS (EC2, S3, Secrets Manager, Route 53)
 
