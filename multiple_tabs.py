@@ -198,28 +198,28 @@ def tweets_user_extract(screen_name):
             oldest = alltweets[-1].id - 1
     
         #transform the tweepy tweets into a 2D array that will populate the csv 
-        outtweets = [tweet.text for tweet in alltweets]
+        user_tweets = [tweet.text for tweet in alltweets]
     
-        filter_user_tweets(outtweets)
+        filter_user_tweets(user_tweets)
     
     except:
         st.write("")
 
 
-def filter_user_tweets(outtweets):
-    keywords = ['SarsCov2', 'corona', 'Wuhan', 'China virus', 'China plague', 'Chinavirus', 'coronavirus', 'covid', 'COVID', 'covid19', 
-                'covid-19', 'mask', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen', 'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 
-                'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown']
+def filter_user_tweets(user_tweets):
+    keywords = ['sarscov2', 'corona', 'mask', 'vaccine', 'pfizer','moderna','astra zeneca', 'astrazeneca', 'social distancing', 'socialdistancing', 'coronavirus',
+                'covid', 'covid19', 'covid-19', 'wuhan', 'china virus', 'china plague', 'chinavirus', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen',
+                'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown']
 
     tweets_containing_keywords = [] 
-    for tweet in outtweets:
-        if any(x in tweet for x in keywords):
+    for tweet in user_tweets:
+        if any(x in tweet.lower() for x in keywords):
             tweets_containing_keywords.append(tweet)
     
     tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
     
     c = 1
-    total_tweets = len(outtweets)
+    total_tweets = len(user_tweets)
     process_tweets(tweets_df_labels, c)
     
 
@@ -293,13 +293,14 @@ def display_results(tweets_processed_df, grouped_df, c):
         plt.show()
         st.pyplot(fig)
         
+
 def about_page():
-    st.title("What Does Twitter Say About Covid-19?")
-    st.markdown("Misinformation has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it")
+    st.title("Navigating Covid-related Misinformation on Twitter")
+    st.write("This app runs [my project](https://github.com/KsinghP/Covid-Tweets-Classification)")
     st.markdown("Confused if a handle tweets conspiratorially about Covid? This app will tell you.")
     st.info('To know more about how it works, navigate to the "How to Use" section using the menu on the left hand side')
-    
 
+    
 def instructions_for_use():
     st.info("Users can enter two parameters: 1. number of tweets the keywords based on which they want tweets to be collected.")
     st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
