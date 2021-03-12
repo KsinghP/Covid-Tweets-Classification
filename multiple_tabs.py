@@ -23,6 +23,7 @@ from wordcloud import WordCloud
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 import nltk
+nltk.download('wordnet')
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 stop = stopwords.words('english')
