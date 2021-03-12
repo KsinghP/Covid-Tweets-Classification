@@ -204,7 +204,7 @@ def tweets_user_extract(screen_name):
         filter_user_tweets(user_tweets)
     
     except:
-        st.write("Handle ain't found")
+        st.write("")
 
 
 def filter_user_tweets(user_tweets):
@@ -278,21 +278,24 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.plotly_chart(fig)
         
     if (c == 1):
-        total_tweets = grouped_df['num_of_tweets_by_type'].sum()
-        st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
-        category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
-        if (category == 'non-conspiratorial'): 
-            st.info("this handle's covid-related tweets are usually non-conspiratorial")
-        elif (category == 'conspiratorial'):
-            st.info("this handle's covid-related tweets are usually conspiratorial")
+	if (len(tweets_processed_df) == 0):
+		st.write("this handle does not exist")
+	else:   
+        	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+        	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
+        	category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
+        	if (category == 'non-conspiratorial'): 
+            		st.info("this handle's covid-related tweets are usually non-conspiratorial")
+        	elif (category == 'conspiratorial'):
+            		st.info("this handle's covid-related tweets are usually conspiratorial")
         
-        combined_string = ' '.join(tweets_processed_df['text'])
-        wordcloud = WordCloud().generate(combined_string)
-        fig, ax = plt.subplots()
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis("off")
-        plt.show()
-        st.pyplot(fig)
+        	combined_string = ' '.join(tweets_processed_df['text'])
+        	wordcloud = WordCloud().generate(combined_string)
+        	fig, ax = plt.subplots()
+        	plt.imshow(wordcloud, interpolation='bilinear')
+        	plt.axis("off")
+        	plt.show()
+        	st.pyplot(fig)
         
 
 def about_page():
