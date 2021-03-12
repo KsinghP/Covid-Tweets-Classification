@@ -204,7 +204,7 @@ def tweets_user_extract(screen_name):
         filter_user_tweets(user_tweets)
     
     except:
-        st.write("")
+        st.write("Handle ain't found")
 
 
 def filter_user_tweets(user_tweets):
