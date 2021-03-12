@@ -1,4 +1,4 @@
-# How to Use
+## How to Use
 
 This project is my attempt to enable users to understand and navigate the problem of Covid-related misinformation on Twitter. It works by accepting user inputs on a web app (http://). There are two inputs that users can give:
 
@@ -6,11 +6,11 @@ This project is my attempt to enable users to understand and navigate the proble
 
 2. Twitter handle: users can input a handle to check whether its Covid-related tweets are conspiratorial or non-conspiratorial. On the backend, the app achieves this by pulling in 3200 of the given handle’s latest tweets related to Covid - tweets are filtered by keywords to select Covid-related ones, and the number might be less than 3200 depending on how many such tweets can be found – and analysing them to see how many of those are conspiratorial. If the proportion is > 25%, the handle is reported as tweeting conspiratorially about Covid. Users can also see a wordcloud of the given handle’s covid-related tweets.
 
-# Demo
+## Demo
 
 
 
-# What does a “conspiratorial” tweet mean?
+## What does a “conspiratorial” tweet mean?
 
 In order to better appreciate the information provided by the app, it’s important to understand that I have labelled a tweet “conspiratorial” only if it explicitly promotes Covid-related misinformation, and not if it simply uses language – for example, using “China virus” to describe the coronavirus – that has come to be associated with misinformation. The examples below should throw more light.
 
@@ -30,7 +30,7 @@ The Keras deep learning model I’ve used returns lower accuracy than
 
 In order to improve the accuracy and mitigate other problems, I’m working on preparing a much bigger training set. This should reduce keyword dependence as well as increase the accuracy of the deep learning model.
 
-# Technologies Used
+## Technologies Used
 
 Python 3.6
 AWS (EC2, S3, Secrets Manager, Route 53)
