@@ -22,3 +22,16 @@ In order to better appreciate the information provided by the app, it’s import
 1. All this suffering if only China didnt lie about what was happening in Wuhan where the virus started
 2. 
 
+# Limitations and scope for improvement
+
+My model achieves about 77% accuracy. As the recall and precision metrics suggest, the non-conspiratorial label is predicted with greater accuracy than the conspiratorial one. There’s also strong dependence on certain keywords. For instance, the presence of “scamdemic” in a tweet almost always results in it being predicted as conspiratorial, even if reading the whole tweet – “covid is not a scamdemic”, for example – suggests that isn’t the case.
+
+The Keras deep learning model I’ve used returns lower accuracy than 
+
+In order to improve the accuracy and mitigate other problems, I’m working on preparing a much bigger training set. This should reduce keyword dependence as well as increase the accuracy of the deep learning model.
+
+# Technologies Used
+
+Python 3.6
+AWS (EC2, S3, Secrets Manager, Route 53)
+
