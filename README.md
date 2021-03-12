@@ -37,5 +37,6 @@ In order to improve the accuracy and mitigate other problems, I’m working on p
 ## Technologies Used
 
 Python 3.6 (pandas, nltk, sklearn, plotly, streamlit and others)
+
 AWS (EC2, S3, Secrets Manager, Route 53)
 
