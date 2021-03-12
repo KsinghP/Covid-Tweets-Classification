@@ -296,7 +296,7 @@ def display_results(tweets_processed_df, grouped_df, c):
 
 def about_page():
     st.title("Navigating Covid Misinformation on Twitter")
-    st.write("Hello, welcome to my app, a humble attempt to understand and combat Covid-related misinformation on Twitter. This app is a result of "		
+    st.write("Hello, welcome to my app, a humble attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, you might want to know which handle tweets conspiratorially about the pandemic")		
     st.write("This app runs [my project](https://github.com/KsinghP/Covid-Tweets-Classification)")
     st.markdown("Confused if a handle tweets conspiratorially about Covid? This app will tell you.")
     st.info('To know more about how it works, navigate to the "How to Use" section using the menu on the left hand side')
