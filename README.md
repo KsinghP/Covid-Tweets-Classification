@@ -34,7 +34,7 @@ The Keras deep learning model I’ve used returns slightly lower accuracy than t
 
 In order to improve the accuracy and mitigate other problems, I’m working on preparing a much bigger training set.
 
-## Technologies Used
+## Tools Used
 
 Python 3.6 (pandas, nltk, sklearn, plotly, streamlit and others)
 
