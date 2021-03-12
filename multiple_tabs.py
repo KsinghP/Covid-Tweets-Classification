@@ -154,10 +154,11 @@ def tweets_keywords_extract(keywords, num_of_tweets):
             # Just exit if any error
                     print("some error : " + str(e))
                     break
-        tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
+        tweets_preprocessed_df = pd.DataFrame(tweets, columns = ['date', 'text', 'handle', 'name', 'location', 'profile_description', 'profile_creation_date', 
+                                                                 'tweets_favourited', 'num_of_tweets', 'num_of_followers', 'num_of_following'])
     
         c = 0
-        process_tweets(tweets_preprocessed_df, c =0)
+        process_tweets(tweets_preprocessed_df, c = 0)
     
     elif not keywords:
         st.write("")
@@ -246,7 +247,7 @@ def predict_tweets(tweets_processed_df, c):
     loaded_vectorizer = pickle.load(open('vectorizer.pickle', 'rb'))
     features = loaded_vectorizer.transform(tweets_processed_df['text'])
     tweets_processed_df['label_cv'] = loaded_model.predict(features)
-    # tweets_processed_df['label_tfidf'] = loaded_model.predict(features_done_x)
+    
     group_by_tweet_label(tweets_processed_df, c)
 
 def group_by_tweet_label(tweets_processed_df, c):  
@@ -279,8 +280,8 @@ def display_results(tweets_processed_df, grouped_df, c):
         total_tweets = grouped_df['num_of_tweets_by_type'].sum()
         st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
         category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
-        if (category == 'scientific'): 
-            st.info("this handle's covid-related tweets are usually scientific")
+        if (category == 'non-conspiratorial'): 
+            st.info("this handle's covid-related tweets are usually non-conspiratorial")
         elif (category == 'conspiratorial'):
             st.info("this handle's covid-related tweets are usually conspiratorial")
         
@@ -294,15 +295,15 @@ def display_results(tweets_processed_df, grouped_df, c):
         
 def about_page():
     st.title("What Does Twitter Say About Covid-19?")
-    st.markdown("<b>Misinformation</b> has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it.", unsafe_allow_html=True)
-    st.markdown("This app is an <i>attempt to analyse</i> covid-related misinformation circulating on Twitter.", unsafe_allow_html=True)
-    st.info("This app collect covid-related tweets, and classifies them as either scientific or conspiratorial.")
+    st.markdown("Misinformation has surged in light of the outbreak of Covid-19, and Twitter has been a major global medium for it")
+    st.markdown("Confused if a handle tweets conspiratorially about Covid? This app will tell you.")
+    st.info('To know more about how it works, navigate to the "How to Use" section using the menu on the left hand side')
     
 
 def instructions_for_use():
     st.info("Users can enter two parameters: 1. number of tweets the keywords based on which they want tweets to be collected.")
     st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
-    st.markdown("To extract tweets based on multiple keywords together, please separate them only by a space.")
+    st.markdown("To extract tweets based on multiple keywords, please separate them only by a space.")
     st.info("For example, to extract tweets based on at least one of the keywords mask, social distancing and lockdown, enter: mask OR social distancing OR lockdown")
     st.info("Similarly, to extract tweets based on all of the keywords mask, social distancing and lockdown, enter: mask social distancing lockdown")
 
