@@ -18,16 +18,17 @@ import matplotlib.pyplot as plt
 import pickle
 import re
 import string
+import plotly.express as px
+from wordcloud import WordCloud
+from sklearn.feature_extraction.text import CountVectorizer
+count_vect = CountVectorizer()
 import nltk
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 stop = stopwords.words('english')
-import plotly.express as px
-from sklearn.feature_extraction.text import CountVectorizer
-count_vect = CountVectorizer()
-from wordcloud import WordCloud
-#from nltk.corpus import wordnet as wn
-#from pywsd.utils import lemmatize, lemmatize_sentence
+from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
+
 
 def get_secret():
 
@@ -232,8 +233,7 @@ def process_tweets(tweets_processed_df, c):
     # remove "not" from stop words
     stop_words = set(stopwords.words('english')) - set(['not'])
     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
-    #tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ' '.join(lemmatize_sentence(x)))
-    
+    tweets_text_df["text"] = tweets_text_df["text"].apply(lambda x: ''.join(lemmatizer.lemmatize(x)))
     predict_tweets(tweets_processed_df, c)
 
 @st.cache()
