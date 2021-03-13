@@ -179,7 +179,7 @@ def tweets_user_extract(screen_name):
     try:
         new_tweets = api.user_timeline(screen_name = screen_name, count=200)
         if not new_tweets:
-            st.write("<font color=‘green’>This handle does not exist</font>", unsafe_allow_html=True)
+            st.write("<font color=red>This handle does not exist</font>", unsafe_allow_html=True)
         else:
             #save most recent tweets
             alltweets.extend(new_tweets)
