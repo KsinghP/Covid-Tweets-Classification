@@ -278,7 +278,7 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.plotly_chart(fig)
         
     if (c == 1):
-	if not tweets_processed_df:
+	if tweets_processed_df.empty:
 		st.write("This handle does not exist")
 	else:   
         	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
