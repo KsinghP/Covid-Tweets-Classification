@@ -268,7 +268,7 @@ def input_parameters_keywords():
 
 
 def input_parameters_handle():
-    screen_name = st.text_input('Enter twitter handle without "@"')
+    screen_name = st.text_input('Enter twitter handle without "@" (it is not case sensitive)')
 
     tweets_user_extract(screen_name)
 
