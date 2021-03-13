@@ -247,14 +247,14 @@ def load_model():
 
 def predict_tweets(tweets_processed_df, c):
     loaded_model = load_model()
-    loaded_vectorizer = pickle.load(open('vectorizer.pickle', 'rb'))
+    loaded_vectorizer = pickle.load(open('count_vectorizer.pickle', 'rb'))
     features = loaded_vectorizer.transform(tweets_processed_df['text'])
-    tweets_processed_df['label_cv'] = loaded_model.predict(features)
+    tweets_processed_df['label_predicted'] = loaded_model.predict(features)
     
     group_by_tweet_label(tweets_processed_df, c)
 
 def group_by_tweet_label(tweets_processed_df, c):  
-    grouped_df = tweets_processed_df.groupby(['label_cv']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
+    grouped_df = tweets_processed_df.groupby(['label_predicted']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
     
     display_results(tweets_processed_df, grouped_df, c)
     
@@ -276,28 +276,24 @@ def input_parameters_handle():
 def display_results(tweets_processed_df, grouped_df, c):   
         
     if (c == 0):
-        fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_cv')
+        fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_predicted')
         st.plotly_chart(fig)
         
     if (c == 1):
-        if tweets_processed_df.empty:
-            st.write("This handle does not exist")
-        else:   
-        	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
-        	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
-        	category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
-        	if (category == 'non-conspiratorial'): 
-            		st.info("this handle's covid-related tweets are usually non-conspiratorial")
-        	elif (category == 'conspiratorial'):
-            		st.info("this handle's covid-related tweets are usually conspiratorial")
-        
-        	combined_string = ' '.join(tweets_processed_df['text'])
-        	wordcloud = WordCloud().generate(combined_string)
-        	fig, ax = plt.subplots()
-        	plt.imshow(wordcloud, interpolation='bilinear')
-        	plt.axis("off")
-        	plt.show()
-        	st.pyplot(fig)
+       	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+       	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
+       	
+        if (grouped_df[grouped_df['label_predicted'] == 'conspiratorial']['num_of_tweets_by_type'].get(key = 1) > int(total_tweets/4)):
+            st.info("More than a quarter of this handle's covid-related tweets are conspiratorial")
+        else:
+            st.info("This handle's covid-related tweets are usually non-conspiratorial")
+        combined_string = ' '.join(tweets_processed_df['text'])
+       	wordcloud = WordCloud().generate(combined_string)
+       	fig, ax = plt.subplots()
+       	plt.imshow(wordcloud, interpolation='bilinear')
+       	plt.axis("off")
+       	plt.show()
+       	st.pyplot(fig)
         
 
 def about_page():
