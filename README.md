@@ -7,7 +7,7 @@ This project is my attempt to enable users to understand and navigate the proble
 2. Twitter handle: users can input a handle to check whether its Covid-related tweets are conspiratorial or non-conspiratorial. On the backend, the app achieves this by pulling in 3200 of the given handle’s latest tweets related to Covid - tweets are filtered by keywords to select Covid-related ones, and the number might be less than 3200 depending on how many such tweets can be found – and analysing them to see how many of those are conspiratorial. If the proportion is > 25%, the handle is reported as tweeting conspiratorially about Covid. Users can also see a wordcloud of the given handle’s covid-related tweets.
 
 ## Demo
-
+![Covid Tweets Classifier Demo](https://gifyu.com/image/ajLD)
 
 
 ## What does a “conspiratorial” tweet mean?
