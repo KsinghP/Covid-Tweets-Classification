@@ -279,7 +279,7 @@ def display_results(tweets_processed_df, grouped_df, c):
     if (c == 0):
         fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_predicted')
         st.plotly_chart(fig)
-        percentage_conspiratorial = round((grouped_df[grouped_df['label'] == 'consp']['num_of_tweets'][1]/grouped_df['num_of_tweets'].sum())*100,1)
+        percentage_conspiratorial = round((grouped_df[grouped_df['label_predicted'] == 'Conspiratorial']['num_of_tweets_by_type'][1]/total_tweets)*100,1)
         st.write("Of the latest {} tweets based on the inputted keywords {}% are conspiratorial".format(total_tweets, percentage_conspiratorial))
     
     if (c == 1):       	
