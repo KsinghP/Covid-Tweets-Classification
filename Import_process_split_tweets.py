@@ -28,10 +28,6 @@ def import_tweets():
 def process_tweets():
     tweets_text_df = import_tweets()
     
-    # assign 1 to non-conspiratorial tweets and 0 to conspiratorial ones  
-    #tweets_text_df['numeric_label'] = np.where(tweets_text_df['label']=='Non-conspiratorial', '1', '0')
-    #tweets_text_df['numeric_label'] = tweets_text_df['numeric_label']
-    
     # lowercase, remove symbols and punctuation
     tweets_text_df['text'] = tweets_text_df['text'].apply(lambda x: str.lower(x))
     tweets_text_df['text'] = tweets_text_df['text'].apply(lambda x: re.sub("(&amp?)", "", x))
