@@ -278,8 +278,8 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.plotly_chart(fig)
         
     if (c == 1):
-	if (len(tweets_processed_df) == 0):
-		st.write("this handle does not exist")
+	if not tweets_processed_df == 0:
+		st.write("This handle does not exist")
 	else:   
         	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
         	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
