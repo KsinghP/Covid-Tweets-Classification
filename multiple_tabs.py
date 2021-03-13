@@ -242,7 +242,7 @@ def process_tweets(tweets_processed_df, c):
 
 @st.cache()
 def load_model():
-    loaded_model = pickle.load(open('multinomialnb_model.sav_v2', 'rb'))
+    loaded_model = pickle.load(open('multinomialnb_model_v2.sav', 'rb'))
     return loaded_model
 
 def predict_tweets(tweets_processed_df, c):
