@@ -278,9 +278,9 @@ def display_results(tweets_processed_df, grouped_df, c):
         st.plotly_chart(fig)
         
     if (c == 1):
-	if tweets_processed_df.empty:
-		st.write("This handle does not exist")
-	else:   
+        if tweets_processed_df.empty:
+            st.write("This handle does not exist")
+        else:   
         	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
         	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
         	category = grouped_df.loc[grouped_df['num_of_tweets_by_type'] == grouped_df['num_of_tweets_by_type'].max(), 'label_cv'].iloc[0]
