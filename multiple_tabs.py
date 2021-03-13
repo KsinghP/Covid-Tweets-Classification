@@ -274,15 +274,16 @@ def input_parameters_handle():
 
 
 def display_results(tweets_processed_df, grouped_df, c):   
-        
+    total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+    
     if (c == 0):
         fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_predicted')
         st.plotly_chart(fig)
-        
-    if (c == 1):
-       	total_tweets = grouped_df['num_of_tweets_by_type'].sum()
-       	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")
-       	
+        percentage_conspiratorial = round((grouped_df[grouped_df['label'] == 'consp']['num_of_tweets'][1]/grouped_df['num_of_tweets'].sum())*100,1)
+        st.write("Of the latest {} tweets based on the inputted keywords {}% are conspiratorial".format(total_tweets, percentage_conspiratorial))
+    
+    if (c == 1):       	
+       	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")       	
         if (grouped_df[grouped_df['label_predicted'] == 'conspiratorial']['num_of_tweets_by_type'].get(key = 1) > int(total_tweets/4)):
             st.info("More than a quarter of this handle's covid-related tweets are conspiratorial")
         else:
