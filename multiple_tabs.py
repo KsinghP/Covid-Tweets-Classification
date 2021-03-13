@@ -242,12 +242,12 @@ def process_tweets(tweets_processed_df, c):
 
 @st.cache()
 def load_model():
-    loaded_model = pickle.load(open('multinomialnb_model.sav', 'rb'))
+    loaded_model = pickle.load(open('multinomialnb_model.sav_v2', 'rb'))
     return loaded_model
 
 def predict_tweets(tweets_processed_df, c):
     loaded_model = load_model()
-    loaded_vectorizer = pickle.load(open('count_vectorizer.pickle', 'rb'))
+    loaded_vectorizer = pickle.load(open('count_vectorizer_v2.pickle', 'rb'))
     features = loaded_vectorizer.transform(tweets_processed_df['text'])
     tweets_processed_df['label_predicted'] = loaded_model.predict(features)
     
