@@ -293,7 +293,8 @@ def display_results(tweets_processed_df, grouped_df, c):
        	fig, ax = plt.subplots()
        	plt.imshow(wordcloud, interpolation='bilinear')
        	plt.axis("off")
-       	plt.show()
+       	st.write ("The wordcloud below is made from the inputted handle's Covid-related tweets")
+        plt.show()
        	st.pyplot(fig)
         
 
