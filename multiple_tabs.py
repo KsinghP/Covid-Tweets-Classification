@@ -308,17 +308,17 @@ def about_page():
 
     
 def instructions_for_use():
-    st.write("<font color=blue><u>Users can provide two inputs:<u></font>", unsafe_allow_html=True)
+    st.write("<u><font color=blue>Users can provide two inputs:</font></u>", unsafe_allow_html=True)
     st.text("")
-    st.write("1.in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
-    st.write("2.in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
-    st.markdown ("<font color=blue><u>List of keywords to choose from (no need to use #)<u></font>", unsafe_allow_html=True)
+    st.write("1.In the **Run Twitter Handle Feature**, they can enter a twitter handle.")
+    st.write("2.In the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
+    st.markdown ("<font color=blue><u>List of keywords to choose from (no need to use #)</u></font>", unsafe_allow_html=True)
     st.info("[sars-cov-2, sarscov2 corona, mask, vaccine, pfizer, moderna, astra zeneca, astrazeneca, social distancing, socialdistancing, coronavirus, covid, covid19, covid-19, wuhan, china virus, china plague, chinavirus, hcq, hydroxychloroquine, shutdown, herdimmunity, herd immunity, vaccine, scamdemic, plandemic, fauci, bill gates, kung flu, kungflu, quarantine, lockdown]")
     st.text("")
-    st.write("<font color=blue><u>Guidelines for entering keywords<u></font>", unsafe_allow_html=True)
-    st.markdown("To extract tweets based on at least one of multiple keywords, please separate them by **OR** (in caps). For example, *mask OR lockdown* would search for tweets with either or both of those two words.")
-    st.markdown("To extract tweets based on multiple keywords, simply separate them by a space. For example, *social distancing* would search for tweets with both those words.")
-    st.markdown("To exclude a keyword, use **-**. For example, *coronavirus -covid* would search for tweets with the first word but not the second.")
+    st.write("<font color=blue><u>Guidelines for entering keywords</u></font>", unsafe_allow_html=True)
+    st.markdown("1.To extract tweets based on at least one of multiple keywords, please separate them by **OR** (in caps). For example, *mask OR lockdown* would search for tweets with either or both of those two words.")
+    st.markdown("2.To extract tweets based on multiple keywords, simply separate them by a space. For example, *social distancing* would search for tweets with both those words.")
+    st.markdown("3.To exclude a keyword, use **-**. For example, *coronavirus -covid* would search for tweets with the first word but not the second.")
     
     
 if __name__ == "__main__":
