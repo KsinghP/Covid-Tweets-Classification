@@ -262,7 +262,7 @@ def group_by_tweet_label(tweets_processed_df, c):
     
 
 def input_parameters_keywords():
-      keywords = st.text_input('Enter keywords (not case sensitive)')
+      keywords = st.text_input('Enter keywords (not case sensitive and # not needed)')
       num_of_tweets = st.number_input('enter number of tweets', value = 100)
       num_of_tweets = int(num_of_tweets)
     
@@ -302,20 +302,21 @@ def display_results(tweets_processed_df, grouped_df, c):
 
 def about_page():
     st.title("Navigating Covid Misinformation on Twitter")
-    st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in. You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation. In addition, you can also enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.")		
+    st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in. **You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation.** In addition, you can also **enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.**")		
     st.write("**This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.**")
     st.info('To understand how to use the app, navigate to the **How to Use** section ')
 
     
 def instructions_for_use():
-    st.write("Users can provide two inputs:")
+    st.write("<font color=blue><u>Users can provide two inputs:<u></font>", unsafe_allow_html=True)
     st.text("")
     st.write("1.in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
     st.write("2.in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
-    st.markdown ("List of keywords to choose from ")
+    st.markdown ("<font color=blue><u>List of keywords to choose from (no need to use #)<u></font>", unsafe_allow_html=True)
     st.info("[sars-cov-2, sarscov2 corona, mask, vaccine, pfizer, moderna, astra zeneca, astrazeneca, social distancing, socialdistancing, coronavirus, covid, covid19, covid-19, wuhan, china virus, china plague, chinavirus, hcq, hydroxychloroquine, shutdown, herdimmunity, herd immunity, vaccine, scamdemic, plandemic, fauci, bill gates, kung flu, kungflu, quarantine, lockdown]")
     st.text("")
-    st.markdown("To extract tweets based on at least one of multiple keywords, please separate them by **OR** (in caps). For example,*mask OR lockdown* would search for tweets with either or both of those two words.")
+    st.write("<font color=blue><u>Guidelines for entering keywords<u></font>", unsafe_allow_html=True)
+    st.markdown("To extract tweets based on at least one of multiple keywords, please separate them by **OR** (in caps). For example, *mask OR lockdown* would search for tweets with either or both of those two words.")
     st.markdown("To extract tweets based on multiple keywords, simply separate them by a space. For example, *social distancing* would search for tweets with both those words.")
     st.markdown("To exclude a keyword, use **-**. For example, *coronavirus -covid* would search for tweets with the first word but not the second.")
     
