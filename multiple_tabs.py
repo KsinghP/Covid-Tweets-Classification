@@ -262,7 +262,7 @@ def group_by_tweet_label(tweets_processed_df, c):
     
 
 def input_parameters_keywords():
-      keywords = st.text_input('Enter keywords')
+      keywords = st.text_input('Enter keywords (not case sensitive)')
       num_of_tweets = st.number_input('enter number of tweets', value = 100)
       num_of_tweets = int(num_of_tweets)
     
@@ -270,7 +270,7 @@ def input_parameters_keywords():
 
 
 def input_parameters_handle():
-    screen_name = st.text_input('Enter twitter handle without "@" (it is not case sensitive)')
+    screen_name = st.text_input('Enter twitter handle without "@" (not case sensitive)')
 
     tweets_user_extract(screen_name)
 
@@ -310,14 +310,15 @@ def about_page():
 def instructions_for_use():
     st.write("Users can provide two inputs:")
     st.text("")
-    st.write("1.in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
-    st.write("2.in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
+    st.write("1.in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
+    st.write("2.in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
     st.markdown ("List of keywords to choose from ")
     st.info("[sars-cov-2, sarscov2 corona, mask, vaccine, pfizer, moderna, astra zeneca, astrazeneca, social distancing, socialdistancing, coronavirus, covid, covid19, covid-19, wuhan, china virus, china plague, chinavirus, hcq, hydroxychloroquine, shutdown, herdimmunity, herd immunity, vaccine, scamdemic, plandemic, fauci, bill gates, kung flu, kungflu, quarantine, lockdown]")
-    st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
-    #st.markdown("To extract tweets based on multiple keywords, please separate them only by a space.")
-    #st.info("For example, to extract tweets based on at least one of the keywords mask, social distancing and lockdown, enter: mask OR social distancing OR lockdown")
-    #st.info("Similarly, to extract tweets based on all of the keywords mask, social distancing and lockdown, enter: mask social distancing lockdown")
-
+    st.text("")
+    st.markdown("To extract tweets based on at least one of multiple keywords, please separate them by **OR** (in caps). For example,*mask OR lockdown* would search for tweets with either or both of those two words.")
+    st.markdown("To extract tweets based on multiple keywords, simply separate them by a space. For example, *social distancing* would search for tweets with both those words.")
+    st.markdown("To exclude a keyword, use **-**. For example, *coronavirus -covid* would search for tweets with the first word but not the second.")
+    
+    
 if __name__ == "__main__":
     main()
