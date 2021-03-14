@@ -91,10 +91,10 @@ def main():
     elif app_mode == "How to Use":
         instructions_for_use()
 
-    elif app_mode == "Run keyword feature":
+    elif app_mode == "Run Keyword Feature":
         input_parameters_keywords()
      
-    elif app_mode == "Run twitter handle feature":
+    elif app_mode == "Run Twitter Handle Feature":
         input_parameters_handle()
 
 def tweets_keywords_extract(keywords, num_of_tweets):
@@ -302,16 +302,18 @@ def display_results(tweets_processed_df, grouped_df, c):
 def about_page():
     st.title("Navigating Covid Misinformation on Twitter")
     st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in. You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation. In addition, you can also enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.")		
-    st.write("This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.")
-    st.info('**To understand how to use the app, navigate to the "How to Use" section using the menu on the left hand side**')
+    st.write("**This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.**")
+    st.info('To understand how to use the app, navigate to the "How to Use" section using the menu on the left hand side.')
 
     
 def instructions_for_use():
-    st.write("Users can provide two inputs:'\n' 1. in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see '\n' 2. in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
-    st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
-    st.markdown("To extract tweets based on multiple keywords, please separate them only by a space.")
-    st.info("For example, to extract tweets based on at least one of the keywords mask, social distancing and lockdown, enter: mask OR social distancing OR lockdown")
-    st.info("Similarly, to extract tweets based on all of the keywords mask, social distancing and lockdown, enter: mask social distancing lockdown")
+    st.write("Users can provide two inputs: 1. in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see")
+    st.text("")
+    st.write("2. in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
+    #st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
+    #st.markdown("To extract tweets based on multiple keywords, please separate them only by a space.")
+    #st.info("For example, to extract tweets based on at least one of the keywords mask, social distancing and lockdown, enter: mask OR social distancing OR lockdown")
+    #st.info("Similarly, to extract tweets based on all of the keywords mask, social distancing and lockdown, enter: mask social distancing lockdown")
 
 if __name__ == "__main__":
     main()
