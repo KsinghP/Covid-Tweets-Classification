@@ -30,6 +30,7 @@ stop = stopwords.words('english')
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 
+st.set_page_config(layout="wide")
 
 def get_secret():
 
@@ -307,9 +308,10 @@ def about_page():
 
     
 def instructions_for_use():
-    st.write("Users can provide two inputs: 1. in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see")
+    st.write("Users can provide two inputs:")
     st.text("")
-    st.write("2. in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
+    st.write("1.in the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see")
+    st.write("2.in the **Run Twitter Handle Feature**, they can enter a twitter handle.")
     #st.markdown("To extract tweets based on one or more of multiple keywords, please separate them by OR.")
     #st.markdown("To extract tweets based on multiple keywords, please separate them only by a space.")
     #st.info("For example, to extract tweets based on at least one of the keywords mask, social distancing and lockdown, enter: mask OR social distancing OR lockdown")
