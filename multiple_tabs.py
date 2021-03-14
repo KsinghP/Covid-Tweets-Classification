@@ -246,7 +246,7 @@ def load_model():
     loaded_model = pickle.load(open('multinomialnb_model_v2.sav', 'rb'))
     return loaded_model
 
-@st.cache()
+#@st.cache(suppress_st_warning=True)
 def predict_tweets(tweets_processed_df, c):
     loaded_model = load_model()
     loaded_vectorizer = pickle.load(open('count_vectorizer_v2.pickle', 'rb'))
@@ -312,7 +312,7 @@ def instructions_for_use():
     st.text("")
     st.write("1.In the **Run Twitter Handle Feature**, they can enter a twitter handle.")
     st.write("2.In the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
-    st.markdown ("<font color=blue><u>List of keywords to choose from (no need to use #)</u></font>", unsafe_allow_html=True)
+    st.markdown ("<font color=blue><u>List of keywords to choose from (no need to use #) 👇</u></font>", unsafe_allow_html=True)
     st.info("[sars-cov-2, sarscov2 corona, mask, vaccine, pfizer, moderna, astra zeneca, astrazeneca, social distancing, socialdistancing, coronavirus, covid, covid19, covid-19, wuhan, china virus, china plague, chinavirus, hcq, hydroxychloroquine, shutdown, herdimmunity, herd immunity, vaccine, scamdemic, plandemic, fauci, bill gates, kung flu, kungflu, quarantine, lockdown]")
     st.text("")
     st.write("<font color=blue><u>Guidelines for entering keywords</u></font>", unsafe_allow_html=True)
