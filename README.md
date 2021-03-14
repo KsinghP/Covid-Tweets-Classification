@@ -24,13 +24,14 @@ In order to better appreciate the information provided by the app, it’s import
 
 # Limitations and scope for improvement
 
-I think the source of most, if not all, limitations in my model is the small size of training data (~500 tweets). Despite this, however, my model achieves a respectable 77% accuracy on the test set (~160 tweets). As the recall and precision metrics suggest, the non-conspiratorial label is predicted with greater accuracy than the conspiratorial one. 
+I think the source of most, if not all, limitations in my model is the small size of training data (~500 tweets). A brief discussion of some of the most important limitations follows:
 
-Another limitation is the model’s strong dependence on keywords. For instance, the presence of “scamdemic” in a tweet almost ensures its prediciton as conspiratorial (because in the training set almost all tweets associated with this word are conspiratorial), even if reading the whole tweet – “covid is not a scamdemic”, for example – would suggest that that isn’t the case. This is also likely due to limited training data.
+1. In order to create my training dataset, I pulled in tweets based on keywords commonly associated with Covid. It's certainly likely that, given the small training dataset, some keywords were either entirely missed or find very little presence in the training set, which means tweets centred around those keywords are unlikely to be predicted with high accuracy.
+2. The model's predicted labels show strong dependence on some keywords occuring in tweets. For instance, the presence of “scamdemic” in a tweet almost ensures its prediciton as conspiratorial (because in the training set almost all tweets associated with this word are conspiratorial), even if reading the whole tweet – “covid is not a scamdemic”, for example – would suggest that that isn’t the case.
+3. The model also fails to catch more subtle types of misinformation. An example would be this tweet (I'm referring to the tweet by @MLevitt_NP2013): https://twitter.com/CT_Bergstrom/status/1357998390680821764
+4. The Keras deep learning model I’ve used returns slightly lower accuracy than the standard machine learning models - which eventually led me to choose one of those to output results to the app - perhaps again due to not enough training data.
 
-The model also fails to catch more subtle misinformation which involves a shrewd manipulation of statistics. An example would be this tweet (I'm referring to the tweet by @MLevitt_NP2013): https://twitter.com/CT_Bergstrom/status/1357998390680821764
-
-The Keras deep learning model I’ve used returns slightly lower accuracy than the standard machine learning models - which eventually led me to choose one of those to output results to the app - perhaps again due to not enough training data.
+Despite the above limitations, however, my model achieves a respectable 77% accuracy on the test set. As the recall and precision metrics suggest, the non-conspiratorial label is predicted with greater accuracy than the conspiratorial one.
 
 In order to improve the accuracy and mitigate other problems, I’m working on preparing a much bigger training set.
 
