@@ -19,14 +19,21 @@ lemmatizer = WordNetLemmatizer()
 from sklearn.model_selection import train_test_split
 
 def import_tweets():
+    '''
+    read in manually-labelled tweets created for training purposes
+    '''
     path = r'C:\Users\Prabhat\Documents\GitHub\Twitter-Project\Model'
     filename = r'\latest_training_data.csv'
     tweets_text_df = pd.read_csv(path + filename)
     
-    return tweets_text_df
+    process_tweets(tweets_text_df)
+    #return tweets_text_df
 
-def process_tweets():
-    tweets_text_df = import_tweets()
+def process_tweets(tweets_text_df):
+    '''
+    read in manually-labelled tweets created for training purposes
+    '''
+    #tweets_text_df = import_tweets()
     
     # lowercase, remove symbols and punctuation
     tweets_text_df['text'] = tweets_text_df['text'].apply(lambda x: str.lower(x))
