@@ -33,7 +33,9 @@ lemmatizer = WordNetLemmatizer()
 st.set_page_config(layout="wide")
 
 def get_secret():
-
+    '''
+    code lifted from AWS Secrets Manager to securely import Twitter API credentials 
+    '''
     secret_name = "twitter_creds"
     region_name = "us-east-2"
 
@@ -84,6 +86,9 @@ def get_secret():
     return secret
 
 def main():
+    '''
+    chooses which page of the app to run depending on user input
+    '''
     st.sidebar.title("Options for Users")
     app_mode = st.sidebar.selectbox("Choose the app mode", ["About", "How to Use", "Run Keyword Feature", "Run Twitter Handle Feature"])
     if app_mode == "About":
@@ -99,6 +104,10 @@ def main():
         input_parameters_handle()
 
 def tweets_keywords_extract(keywords, num_of_tweets):
+    '''
+    extracts tweets based on keywords inputted on the app by a user
+    '''
+    # consumer_key and consumer_secret contain twitter API credentials
     secret_key = get_secret()
     consumer_key = secret_key[17:42]
     consumer_secret = secret_key[63:113]
@@ -166,6 +175,10 @@ def tweets_keywords_extract(keywords, num_of_tweets):
         st.write("")
         
 def tweets_user_extract(screen_name):
+    '''
+    extracts tweets of the handle inputted on the app by a user
+    '''
+    # consumer_key and consumer_secret contain twitter API credentials
     secret_key = get_secret()  	
     consumer_key = secret_key[17:42]
     consumer_secret = secret_key[63:113]
@@ -192,7 +205,7 @@ def tweets_user_extract(screen_name):
             while len(new_tweets) > 0:
                 print(f"getting tweets before {oldest}")
             
-                #all subsiquent requests use the max_id param to prevent duplicates
+                #all subsequent requests use the max_id param to prevent duplicates
                 new_tweets = api.user_timeline(screen_name = screen_name, count=200, max_id=oldest)
             
                 #save most recent tweets
@@ -203,6 +216,8 @@ def tweets_user_extract(screen_name):
         
             #transform the tweepy tweets into a 2D array that will populate the csv 
             user_tweets = [tweet.text for tweet in alltweets]
+            # c contains total number of tweets of the inputted handle
+            # c also later acts as parameter to determine which function of the app to run
             c = len(user_tweets)
             filter_user_tweets(user_tweets, c)
     
@@ -211,6 +226,10 @@ def tweets_user_extract(screen_name):
 
 
 def filter_user_tweets(user_tweets, c):
+    '''
+    filters out the inputted handle's tweets not related to covid 
+    '''
+    #tweets not containing any of the words below will be filtered out
     keywords = ['sarscov2', 'corona', 'mask', 'masks', 'vaccine', 'vaccines', 'pfizer','moderna','astra zeneca', 'astrazeneca', 'social distancing', 'socialdistancing', 'coronavirus',
                 'covid', 'covid19', 'covid-19', 'variant', 'variants', 'wuhan', 'china virus', 'china plague', 'chinavirus', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen',
                 'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown', 'lockdowns']
@@ -222,45 +241,72 @@ def filter_user_tweets(user_tweets, c):
     
     tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
     
-    #total_tweets = len(user_tweets)
     process_tweets(tweets_df_labels, c)
     
-
-def process_tweets(tweets_processed_df, c):
-    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x:  re.sub(r'(pic.twitter.com.*)|(http.*?\s)|(http.*?)$|(RT\s)', "", x))
-    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: x.encode('ascii', 'ignore').decode("utf-8"))    
-    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: str.lower(x))
-    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(&amp?)", "", x))
-    tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(@.*?)\s", "", x))
-    tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: re.sub('[%s]' % re.escape(string.punctuation),'',x))
-
-    # remove "not" from stop words
-    stop_words = set(stopwords.words('english')) - set(['not'])
-    tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
-    tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ''.join(lemmatizer.lemmatize(x)))
+def process_tweets(tweets_preprocessed_df, c):
+    '''
+    tweets processed by calling a function from the base module (Import_process_split_tweets.py)  
+    '''
+    import Import_process_split_tweets
+    tweets_processed_df = Import_process_split_tweets.process_tweets(tweets_preprocessed_df)
+    
     predict_tweets(tweets_processed_df, c)
 
+# =============================================================================
+# def process_tweets(tweets_processed_df, c):
+#     '''
+#     all tweets turned to lowercase, punctuation and numbers removed etc.  
+#     '''
+#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x:  re.sub(r'(pic.twitter.com.*)|(http.*?\s)|(http.*?)$|(RT\s)', "", x))
+#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: x.encode('ascii', 'ignore').decode("utf-8"))    
+#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: str.lower(x))
+#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(&amp?)", "", x))
+#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(@.*?)\s", "", x))
+#     tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: re.sub('[%s]' % re.escape(string.punctuation),'',x))
+# 
+#     # remove "not" from stop words (helps increase model's accuracy)
+#     stop_words = set(stopwords.words('english')) - set(['not'])
+#     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
+#     
+#     # tweets lemmatized
+#     tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ''.join(lemmatizer.lemmatize(x)))
+#     predict_tweets(tweets_processed_df, c)
+# 
+# =============================================================================
 @st.cache()
 def load_model():
+    '''
+    import model created in another module
+    '''
     loaded_model = pickle.load(open('multinomialnb_model_v2.sav', 'rb'))
     return loaded_model
 
 
 def predict_tweets(tweets_processed_df, c):
+    '''
+    import vectorizer created in another module, and predict labels of tweets
+    '''
     loaded_model = load_model()
     loaded_vectorizer = pickle.load(open('count_vectorizer_v2.pickle', 'rb'))
     features = loaded_vectorizer.transform(tweets_processed_df['text'])
+    # predict labels
     tweets_processed_df['label_predicted'] = loaded_model.predict(features)
     
     group_by_tweet_label(tweets_processed_df, c)
 
 def group_by_tweet_label(tweets_processed_df, c):  
+    '''
+    group tweets by the two labels (conspiratorial, non-conspiratorial)
+    '''
     grouped_df = tweets_processed_df.groupby(['label_predicted']).size().reset_index(name='num_of_tweets_by_type').sort_values('num_of_tweets_by_type', ascending=False)
     
     display_results(tweets_processed_df, grouped_df, c)
     
 
 def input_parameters_keywords():
+      '''
+      accept user input of keywords
+      '''
       keywords = st.text_input('Enter keywords (not case sensitive and # not needed)')
       num_of_tweets = st.number_input('enter number of tweets', value = 100)
       num_of_tweets = int(num_of_tweets)
@@ -269,20 +315,29 @@ def input_parameters_keywords():
 
 
 def input_parameters_handle():
+    '''
+     accept user input of twitter handle
+     '''
     screen_name = st.text_input('Enter twitter handle without "@" (not case sensitive)')
 
     tweets_user_extract(screen_name)
 
 
 def display_results(tweets_processed_df, grouped_df, c):   
-    total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+    '''
+     display results on the app depending on user input
+     c acts as paramter to determine whether user input is handle or keyword(s)
+     '''
     
+    total_tweets = grouped_df['num_of_tweets_by_type'].sum()
+    # if user input is keyword(s)
     if (c == 0):
         fig = px.pie(grouped_df, values='num_of_tweets_by_type', names='label_predicted')
         st.plotly_chart(fig)
         percentage_conspiratorial = round((grouped_df[grouped_df['label_predicted'] == 'conspiratorial']['num_of_tweets_by_type'][1]/total_tweets)*100,1)
         st.write("Of the latest {} tweets based on the inputted keywords {}% are conspiratorial".format(total_tweets, percentage_conspiratorial))
     
+    # if user input is twitter handle
     if (c != 0):
        	st.write("Of the last {} tweets made by this handle, {} are covid-related".format(c,total_tweets))	
         if (grouped_df[grouped_df['label_predicted'] == 'conspiratorial']['num_of_tweets_by_type'].get(key = 1) > int(total_tweets/4)):
@@ -300,6 +355,9 @@ def display_results(tweets_processed_df, grouped_df, c):
         
 
 def about_page():
+    '''
+    Display messages on the app's landing page
+    '''
     st.title("Navigating Covid Misinformation on Twitter")
     st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in.")
     st.write("**You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation**. In addition, you can also **enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.**")
@@ -308,6 +366,9 @@ def about_page():
 
     
 def instructions_for_use():
+    '''
+    Display messages on the app's second page
+    '''
     st.write("<u><font color=blue>Users can provide two inputs:</font></u>", unsafe_allow_html=True)
     st.text("")
     st.write("1.In the **Run Twitter Handle Feature** 👈, they can enter a twitter handle.")
