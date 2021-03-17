@@ -260,7 +260,7 @@ def load_model_vectorizer():
     '''
     loaded_model = pickle.load(open('multinomialnb_model_v2.sav', 'rb'))
     loaded_vectorizer = pickle.load(open('count_vectorizer_v2.pickle', 'rb'))
-    return loaded_model
+    return (loaded_model, loaded_vectorizer)
 
 
 def predict_tweets(tweets_processed_df, c):
