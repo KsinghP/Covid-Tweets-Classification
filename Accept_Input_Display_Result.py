@@ -212,7 +212,7 @@ def tweets_user_extract(screen_name):
 
 def filter_user_tweets(user_tweets, c):
     keywords = ['sarscov2', 'corona', 'mask', 'masks', 'vaccine', 'vaccines', 'pfizer','moderna','astra zeneca', 'astrazeneca', 'social distancing', 'socialdistancing', 'coronavirus',
-                'covid', 'covid19', 'covid-19', 'wuhan', 'china virus', 'china plague', 'chinavirus', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen',
+                'covid', 'covid19', 'covid-19', 'variant', 'variants', 'wuhan', 'china virus', 'china plague', 'chinavirus', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen',
                 'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown', 'lockdowns']
 
     tweets_containing_keywords = [] 
