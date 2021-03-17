@@ -203,17 +203,17 @@ def tweets_user_extract(screen_name):
         
             #transform the tweepy tweets into a 2D array that will populate the csv 
             user_tweets = [tweet.text for tweet in alltweets]
-        
-            filter_user_tweets(user_tweets)
+            c = len(user_tweets)
+            filter_user_tweets(user_tweets, c)
     
     except:
         st.write("")
 
 
-def filter_user_tweets(user_tweets):
-    keywords = ['sarscov2', 'corona', 'mask', 'vaccine', 'pfizer','moderna','astra zeneca', 'astrazeneca', 'social distancing', 'socialdistancing', 'coronavirus',
+def filter_user_tweets(user_tweets, c):
+    keywords = ['sarscov2', 'corona', 'mask', 'masks', 'vaccine', 'vaccines', 'pfizer','moderna','astra zeneca', 'astrazeneca', 'social distancing', 'socialdistancing', 'coronavirus',
                 'covid', 'covid19', 'covid-19', 'wuhan', 'china virus', 'china plague', 'chinavirus', 'hcq', 'hydroxychloroquine', 'shutdown', 'reopen',
-                'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown']
+                'herdimmunity', 'herd immunity', 'vaccine', 'scamdemic', 'plandemic', 'fauci', 'bill gates', 'kung flu', 'kungflu', 'quarantine', 'lockdown', 'lockdowns']
 
     tweets_containing_keywords = [] 
     for tweet in user_tweets:
@@ -222,8 +222,7 @@ def filter_user_tweets(user_tweets):
     
     tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
     
-    c = 1
-    total_tweets = len(user_tweets)
+    #total_tweets = len(user_tweets)
     process_tweets(tweets_df_labels, c)
     
 
@@ -284,8 +283,8 @@ def display_results(tweets_processed_df, grouped_df, c):
         percentage_conspiratorial = round((grouped_df[grouped_df['label_predicted'] == 'conspiratorial']['num_of_tweets_by_type'][1]/total_tweets)*100,1)
         st.write("Of the latest {} tweets based on the inputted keywords {}% are conspiratorial".format(total_tweets, percentage_conspiratorial))
     
-    if (c == 1):       	
-       	st.write("Of the last approx 3200 tweets, this user has made", total_tweets, "covid-related tweets")       	
+    if (c != 0):
+       	st.write("Of the last {} tweets made by this handle, {} are covid-related".format(c,total_tweets))	
         if (grouped_df[grouped_df['label_predicted'] == 'conspiratorial']['num_of_tweets_by_type'].get(key = 1) > int(total_tweets/4)):
             st.info("More than a quarter of this handle's covid-related tweets are conspiratorial")
         else:
@@ -303,8 +302,8 @@ def display_results(tweets_processed_df, grouped_df, c):
 def about_page():
     st.title("Navigating Covid Misinformation on Twitter")
     st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in.")
-    st.write("<u>You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation.</u> In addition, you can also <u>enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.</u>")
-    st.write("**This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.**")
+    st.write("**You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation**. In addition, you can also **enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.**")
+    st.write("This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.**")
     st.info('To understand how to use the app, navigate to the **How to Use** section from the side bar menu 👈')
 
     
