@@ -27,15 +27,13 @@ def import_tweets():
     tweets_text_df = pd.read_csv(path + filename)
     
     process_tweets(tweets_text_df)
-    #return tweets_text_df
-
+    
 def process_tweets(tweets_text_df):
     '''
     read in manually-labelled tweets created for training purposes
     '''
-    #tweets_text_df = import_tweets()
     
-    # lowercase, remove symbols and punctuation
+    # convert to lowercase, remove symbols and punctuation
     tweets_text_df['text'] = tweets_text_df['text'].apply(lambda x: str.lower(x))
     tweets_text_df['text'] = tweets_text_df['text'].apply(lambda x: re.sub("(&amp?)", "", x))
     tweets_text_df['text'] = tweets_text_df['text'].apply(lambda x: re.sub("(@.*?)\s", "", x))
