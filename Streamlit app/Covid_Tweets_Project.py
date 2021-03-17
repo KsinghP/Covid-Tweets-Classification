@@ -343,7 +343,7 @@ def about_page():
     st.title("Navigating Covid Misinformation on Twitter")
     st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in.")
     st.write("**You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation**. In addition, you can also **enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.**")
-    st.write("This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.**")
+    st.write("This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.")
     st.info('To understand how to use the app, navigate to the **How to Use** section from the side bar menu 👈')
 
     
