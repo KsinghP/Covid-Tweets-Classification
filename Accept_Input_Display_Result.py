@@ -242,6 +242,7 @@ def filter_user_tweets(user_tweets, c):
     tweets_df_labels = pd.DataFrame(tweets_containing_keywords, columns = ['text'])
     
     process_tweets(tweets_df_labels, c)
+
     
 def process_tweets(tweets_preprocessed_df, c):
     '''
@@ -252,44 +253,25 @@ def process_tweets(tweets_preprocessed_df, c):
     
     predict_tweets(tweets_processed_df, c)
 
-# =============================================================================
-# def process_tweets(tweets_processed_df, c):
-#     '''
-#     all tweets turned to lowercase, punctuation and numbers removed etc.  
-#     '''
-#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x:  re.sub(r'(pic.twitter.com.*)|(http.*?\s)|(http.*?)$|(RT\s)', "", x))
-#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: x.encode('ascii', 'ignore').decode("utf-8"))    
-#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: str.lower(x))
-#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(&amp?)", "", x))
-#     tweets_processed_df['text'] = tweets_processed_df['text'].apply(lambda x: re.sub("(@.*?)\s", "", x))
-#     tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: re.sub('[%s]' % re.escape(string.punctuation),'',x))
-# 
-#     # remove "not" from stop words (helps increase model's accuracy)
-#     stop_words = set(stopwords.words('english')) - set(['not'])
-#     tweets_processed_df["text"] = tweets_processed_df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
-#     
-#     # tweets lemmatized
-#     tweets_processed_df["text"] = tweets_processed_df["text"].apply(lambda x: ''.join(lemmatizer.lemmatize(x)))
-#     predict_tweets(tweets_processed_df, c)
-# 
-# =============================================================================
 @st.cache()
-def load_model():
+def load_model_vectorizer():
     '''
-    import model created in another module
+    import model and vectorizer created in another module
     '''
     loaded_model = pickle.load(open('multinomialnb_model_v2.sav', 'rb'))
+    loaded_vectorizer = pickle.load(open('count_vectorizer_v2.pickle', 'rb'))
     return loaded_model
 
 
 def predict_tweets(tweets_processed_df, c):
     '''
-    import vectorizer created in another module, and predict labels of tweets
+    predict labels of tweets
     '''
-    loaded_model = load_model()
-    loaded_vectorizer = pickle.load(open('count_vectorizer_v2.pickle', 'rb'))
-    features = loaded_vectorizer.transform(tweets_processed_df['text'])
+    # fetch model and vectorizer from previous function
+    loaded_model, loaded_vectorizer = load_model_vectorizer()
+    
     # predict labels
+    features = loaded_vectorizer.transform(tweets_processed_df['text'])
     tweets_processed_df['label_predicted'] = loaded_model.predict(features)
     
     group_by_tweet_label(tweets_processed_df, c)
