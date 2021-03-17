@@ -253,7 +253,7 @@ def process_tweets(tweets_preprocessed_df, c):
     
     predict_tweets(tweets_processed_df, c)
 
-@st.cache()
+@st.cache(allow_output_mutation=True)
 def load_model_vectorizer():
     '''
     import model and vectorizer created in another module
