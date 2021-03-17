@@ -302,7 +302,7 @@ def display_results(tweets_processed_df, grouped_df, c):
 
 def about_page():
     st.title("Navigating Covid Misinformation on Twitter")
-    st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in. **You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation.** In addition, you can also **enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.**")		
+    st.write("Hello, welcome to my app, an attempt to understand and combat Covid-related misinformation on Twitter. Given the sea of covid misinformation out there, there's a good chance you've encountered tweets that are either borderline or outright misinformation. No one can fault you for peeking at handles making these tweets to check whether they're first-time offenders or serious vectors of misinformation. But of course it's near-impossible to go through a handle's tweet history, which is where this app comes in. <u>You can simply input the handle of concern and know whether or not it regularly tweets covid misinformation.</u> In addition, you can also <u>enter certain keywords and check to what extent they're associated with conspiratorial covid tweets.</u>")		
     st.write("**This app works by running [my project](https://github.com/KsinghP/Covid-Tweets-Classification) in the background.**")
     st.info('To understand how to use the app, navigate to the **How to Use** section from the side bar menu 👈')
 
@@ -312,7 +312,7 @@ def instructions_for_use():
     st.text("")
     st.write("1.In the **Run Twitter Handle Feature**, they can enter a twitter handle.")
     st.write("2.In the **Run Keyword Feature**, they can enter one or more keywords from the list below and also enter the number of tweets whose conspiratorial vs. non-conspiratorial breakup they want to see.")
-    st.markdown ("<font color=blue><u>List of keywords to choose from (no need to use #)</u></font>👇", unsafe_allow_html=True)
+    st.markdown ("<font color=blue><u>List of keywords to choose from</u></font>👇(no need to use #)", unsafe_allow_html=True)
     st.info("[sars-cov-2, sarscov2 corona, mask, vaccine, pfizer, moderna, astra zeneca, astrazeneca, social distancing, socialdistancing, coronavirus, covid, covid19, covid-19, wuhan, china virus, china plague, chinavirus, hcq, hydroxychloroquine, shutdown, herdimmunity, herd immunity, vaccine, scamdemic, plandemic, fauci, bill gates, kung flu, kungflu, quarantine, lockdown]")
     st.text("")
     st.write("<font color=blue><u>Guidelines for entering keywords</u></font>", unsafe_allow_html=True)
