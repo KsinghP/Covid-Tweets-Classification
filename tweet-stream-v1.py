@@ -1,71 +1,105 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Apr 29 21:59:51 2021
-
+Created on Fri May  7 03:57:07 2021
 @author: Prabhat
 """
-
-import json
-from datetime import datetime
-import calendar
-import random
-import time
-import sys
 import tweepy
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+import json
 import boto3
+import time
+
 
 #Variables that contains the user credentials to access Twitter API
-consumer_key = 'zwnXdkEfHNxEGxtavDW3LZyNQ'
-consumer_secret ='VBlac4wSEvM0UxH703uXEIGTZbnLT3dYJFsTLQ0lpN0YEJKqnE'
-access_token = '976708394370310144-ELyoMSfwXpPyuxENhIztG1T3Icx0Tav'
-access_token_secret = 'ozEVbT4BFwOt2lK44AUOkLPL9cZldxCNzy10YeNYNAbkh'
+consumer_key = '8cK5vc4B4mgGbAhAihlFHwluO'
+consumer_secret ='WMqOdc6R74KL5Jo5FaDXRiXx02V3vTYIZUiD0y6EbSGxnu8WwN'
+access_token = '976708394370310144-xLkTTjTzYueNg8sHZ6kpXIHyfyC6lQx'
+access_token_secret = 'Am8UL5jOWmLyFBIN9P88Vhua3TvhUB9tcp9guzaB6yOQQ'
 
+class StdOutListener(StreamListener):
 
-class TweetStreamListener(StreamListener):        
-    # on success
     def on_data(self, data):
         tweet = json.loads(data)
+        print ('ok1')
         try:
-            if 'text' in tweet.keys():
-                #print (tweet['text'])
-                # message = str(tweet)+',\n'
-                message = json.dumps(tweet)
-                message = message + ",\n"
+            if 'extended_tweet' in tweet.keys():
+                print ('ok2')
+                message_lst = [str(tweet['id']),
+                       str(tweet['user']['name']),
+                       str(tweet['user']['screen_name']),
+                       tweet['extended_tweet']['full_text'],
+                       str(tweet['user']['followers_count']),
+                       str(tweet['user']['location']),
+                       str(tweet['geo']),
+                       str(tweet['created_at']),
+                       '\n'
+                       ]
+                message = '\t'.join(message_lst)
+                print ('ok3')
                 print(message)
-                kinesis_client.put_record(
-                    DeliveryStreamName=stream_name,
+                client.put_record(
+                    DeliveryStreamName=delivery_stream,
+                    Record={
+                    'Data': message
+                    }
+                )
+            elif 'text' in tweet.keys():
+                #print (tweet['text'])
+                message_lst = [str(tweet['id']),
+                       str(tweet['user']['name']),
+                       str(tweet['user']['screen_name']),
+                       tweet['text'].replace('\n',' ').replace('\r',' '),
+                       str(tweet['user']['followers_count']),
+                       str(tweet['user']['location']),
+                       str(tweet['geo']),
+                       str(tweet['created_at']),
+                       '\n'
+                       ]
+                message = '\t'.join(message_lst)
+                print ('ok4')
+                print(message)
+                client.put_record(
+                    DeliveryStreamName=delivery_stream,
                     Record={
                     'Data': message
                     }
                 )
         except (AttributeError, Exception) as e:
+                print ('ok5')
                 print (e)
         return True
-        
-    # on failure
+
     def on_error(self, status):
-        print(status)
-
-
-stream_name = 'India-covid-emergency-tweets'  # fill the name of Kinesis data stream you created
-
+        print ('ok6')
+        print (status)
+        
 if __name__ == '__main__':
-    # create kinesis client connection
-    kinesis_client = boto3.client('firehose',
-                                  region_name='',  # enter the region
-                                  aws_access_key_id='976708394370310144-ELyoMSfwXpPyuxENhIztG1T3Icx0Tav',  # fill your AWS access key id
-                                  aws_secret_access_key='ozEVbT4BFwOt2lK44AUOkLPL9cZldxCNzy10YeNYNAbkh')  # fill you aws secret access key
-    # create instance of the tweepy tweet stream listener
-    listener = TweetStreamListener()
-    # set twitter keys/tokens
-    auth = OAuthHandler(consumer_key, consumer_secret)
+
+    #This handles Twitter authetification and the connection to Twitter Streaming API
+    listener = StdOutListener()
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
-    # create instance of the tweepy stream
-    stream = Stream(auth, listener)
-    # search twitter for tags or keywords from cli parameters
-    query = sys.argv[1:] # list of CLI arguments 
-    query_fname = ' '.join(query) # string
-    stream.filter(track=query)
+    
+    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    #tweets = Table('tweets_ft',connection=conn)
+    client = boto3.client('firehose', 
+                          region_name='us-east-2',
+                          aws_access_key_id='AKIAX64DZMOZHSTPCYUF',
+                          aws_secret_access_key='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', 
+                          endpoint_url='https://kinesis.us-east-2.amazonaws.com/')
+
+    delivery_stream = 'covid-help-tweets'
+    #This line filter Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
+    #stream.filter(track=['trump'], stall_warnings=True)
+    while True:
+        try:
+            print('Twitter streaming...')
+            stream = Stream(auth, listener)
+            stream.filter(track=['covid'], languages=['en'], stall_warnings=True)
+        except Exception as e:
+            print(e)
+            print('Disconnected...')
+            time.sleep(5)
+            continue  
