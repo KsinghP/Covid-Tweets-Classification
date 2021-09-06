@@ -1,6 +1,6 @@
 ## How to Use
 
-This project is my attempt to enable users to understand and navigate the problem of Covid-related misinformation on Twitter. It works by accepting user inputs on a web app (http://). There are two inputs that users can give:
+This project is my attempt to enable users to understand and navigate the problem of Covid-related misinformation on Twitter. It works by accepting user inputs on a web app (http://tweetscovid19.prabhats.com/). There are two inputs that users can give:
 
 1. Covid-related keyword(s) and number of tweets: users can input one or more keywords (list provided on the “How to use” page of the app) and a certain number of tweets. The app will work on the backend to pull the same number of latest tweets based on the provided keywords, and inform users of the percentage breakup of conspiratorial and non-conspiratorial tweets. 
 
